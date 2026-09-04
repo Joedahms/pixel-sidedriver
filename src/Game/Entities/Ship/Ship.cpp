@@ -17,8 +17,6 @@
 #include "Parts/Engine.hpp"
 #include "Parts/Hull.hpp"
 
-struct Body;
-
 namespace {
     auto createShip(entt::registry &registry, const b2Vec2 position) -> entt::entity {
         const auto ship = registry.create();

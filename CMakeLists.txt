@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.28)
-project(SpaceGame)
+project(PixelSideDriver)
 
 set(CMAKE_CXX_STANDARD 23)
 
@@ -18,7 +18,7 @@ FetchContent_Declare(
 )
 FetchContent_MakeAvailable(raylib)
 
-add_executable(SpaceGame
+add_executable(PixelSideDriver
         # Entry point & third-party
         src/main.cpp
         src/rlImGui/rlImGui.cpp
@@ -130,17 +130,24 @@ add_executable(SpaceGame
         src/Game/Components/Joint.hpp
         src/Game/Utils.hpp
         src/Game/Utils.cpp
+        src/Game/Entities/Ship/Rectangle.cpp
+        src/Game/Entities/Ship/Rectangle.hpp
+        src/Game/Components/DimensionsComponent.hpp
+        src/Game/Entities/Wheel.cpp
+        src/Game/Entities/Wheel.hpp
+        src/Game/Components/Radius.hpp
+        src/Game/Components/RectangleSize.hpp
 )
 
-target_link_libraries(SpaceGame
+target_link_libraries(PixelSideDriver
         raylib EnTT::EnTT imgui::imgui box2d::box2d)
-target_compile_options(SpaceGame PRIVATE -Os)
+target_compile_options(PixelSideDriver PRIVATE -Os)
 
 # Copy assets next to the executable so the build output is relocatable
-add_custom_command(TARGET SpaceGame POST_BUILD
+add_custom_command(TARGET PixelSideDriver POST_BUILD
         COMMAND ${CMAKE_COMMAND} -E copy_directory_if_different
         ${CMAKE_CURRENT_SOURCE_DIR}/sprites
-        $<TARGET_FILE_DIR:SpaceGame>/sprites
+        $<TARGET_FILE_DIR:PixelSideDriver>/sprites
         COMMENT "Copying assets next to executable")
 
 

@@ -4,8 +4,12 @@
 #include <raymath.h>
 
 #include "../../GameState.hpp"
+#include "../../Utils.hpp"
 #include "../../Components/Attachment.hpp"
 #include "../../Components/Body.hpp"
+#include "../../Components/DimensionsComponent.hpp"
+#include "../../Components/Radius.hpp"
+#include "../../Components/RectangleSize.hpp"
 #include "../../Components/Sprite.hpp"
 #include "../../Components/Transform2D.hpp"
 #include "../../Components/Tags/ShowClickInfoTag.hpp"
@@ -87,6 +91,30 @@ namespace {
             auto        [body, sprite] = renderablesView.get<Body, Sprite>(renderable);
             b2Transform transform      = b2Body_GetTransform(body.id);
             renderEntity(screenRectangle, transform, sprite, 255);
+        }
+
+        for (const auto renderablesView = registry.view<Body, RectangleSize>(); const auto
+             renderable: renderablesView) {
+            auto   [body, size] = renderablesView.get<Body, RectangleSize>(renderable);
+            b2Vec2 position     = b2Body_GetPosition(body.id);
+            DrawRectangleV(Vector2{
+                               position.x * Constants::pixelsPerMeter,
+                               position.y * Constants::pixelsPerMeter
+                           },
+                           Utils::b2Vec2ToVector2(size.value),
+                           RED);
+        }
+
+        for (const auto renderablesView = registry.view<Body, Radius>(); const auto renderable:
+             renderablesView) {
+            auto   [body, radius] = renderablesView.get<Body, Radius>(renderable);
+            b2Vec2 position       = b2Body_GetPosition(body.id);
+            DrawCircleV(Vector2{
+                            position.x * Constants::pixelsPerMeter,
+                            position.y * Constants::pixelsPerMeter
+                        },
+                        radius.value,
+                        RED);
         }
     }
 

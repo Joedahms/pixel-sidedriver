@@ -3,10 +3,17 @@
 #include <box2d/box2d.h>
 
 #include "Game.hpp"
+
+#include <iostream>
+
 #include "GameTime.hpp"
 #include "Inventory.hpp"
 #include "TextureCache.hpp"
+#include "Utils.hpp"
 #include "../VelocityChangeEvent.hpp"
+#include "Constants/Constants.hpp"
+#include "Entities/Wheel.hpp"
+#include "Entities/Ship/Rectangle.hpp"
 #include "Entities/Ship/Ship.hpp"
 #include "Gui/GuiManager.hpp"
 #include "Gui/DebugOverlay/DebugOverlay.hpp"
@@ -132,11 +139,40 @@ void Game::setupNewGame() {
     registry.ctx().emplace<Inventory>();
 
     b2WorldDef worldDef = b2DefaultWorldDef();
-    worldDef.gravity    = {0, 0};
+    worldDef.gravity    = {0, 10};
     b2WorldId worldId   = b2CreateWorld(&worldDef);
     registry.ctx().emplace<b2WorldId>(worldId);
 
-    Ship::createPlayerShip(registry, {.x = 0, .y = 0});
+    b2BodyDef groundDef = b2DefaultBodyDef();
+    groundDef.position = (b2Vec2){400 / Constants::pixelsPerMeter, 550 / Constants::pixelsPerMeter};
+    b2BodyId  groundId = b2CreateBody(worldId, &groundDef);
+    b2Polygon groundBox = b2MakeBox(5000 / Constants::pixelsPerMeter,
+                                    10 / Constants::pixelsPerMeter);
+    b2ShapeDef groundShapeDef = b2DefaultShapeDef();
+    b2CreatePolygonShape(groundId, &groundShapeDef, &groundBox);
+
+    entt::entity body = Dahms::Rectangle::createRectangle(registry, {100, -100}, {200, 40});
+    float radius = 30;
+    Wheel::createWheel(registry, {100, 0 - radius}, radius, body, {0, 40});
+
+    float size = 30;
+    int gap = 2;
+    int boxes = 0;
+    for (float x = -800; x < 800; x = x + size + gap) {
+        for (float y = 0; y < 500; y = y + size / 2) {
+            Dahms::Rectangle::createRectangle(registry,
+                                  {
+                                      x,
+                                   y
+                                  },
+                                  {size / 2, size / 2});
+            boxes++;
+        }
+    }
+    std::cout << boxes << std::endl;
+
+
+    //Ship::createPlayerShip(registry, {.x = 0, .y = 0});
     //Ship::createNpcShip(registry, {100, 100});
 
     BackgroundSystem::createStartingBackground(registry);
