@@ -154,6 +154,7 @@ void Game::setupNewGame() {
     entt::entity body = Dahms::Rectangle::createRectangle(registry, {100, -100}, {200, 40});
     float radius = 30;
     Wheel::createWheel(registry, {100, 0 - radius}, radius, body, {0, 40});
+    Wheel::createWheel(registry, {300, 0 - radius}, radius, body, {200, 40});
 
     float size = 30;
     int gap = 2;

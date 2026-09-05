@@ -22,13 +22,15 @@ namespace Wheel {
 
         if (parent != entt::null) {
             const b2BodyId parentBodyId = registry.get<Body>(parent).id;
-            b2DistanceJointDef jointDef     = b2DefaultDistanceJointDef();
-            jointDef.bodyIdA            = bodyId;
-            jointDef.bodyIdB            = parentBodyId;
-            jointDef.localAnchorA       = {0,0};
-            jointDef.localAnchorB       = {attachmentPoint.x / Constants::pixelsPerMeter, attachmentPoint.y / Constants::pixelsPerMeter};
-            jointDef.length = 50 / Constants::pixelsPerMeter;
-            registry.emplace<Joint>(wheel, b2CreateDistanceJoint(worldId, &jointDef));
+            b2WheelJointDef jointDef     = b2DefaultWheelJointDef();
+            jointDef.bodyIdA            = parentBodyId;
+            jointDef.bodyIdB            = bodyId;
+            jointDef.localAnchorA       = {attachmentPoint.x / Constants::pixelsPerMeter, attachmentPoint.y / Constants::pixelsPerMeter};
+            jointDef.localAnchorB       = {0,0};
+            jointDef.enableSpring = true;
+            jointDef.enableLimit = true;
+            jointDef.localAxisA = {0, 1};
+            registry.emplace<Joint>(wheel, b2CreateWheelJoint(worldId, &jointDef));
             registry.emplace<Relationship>(wheel, parent);
         }
 

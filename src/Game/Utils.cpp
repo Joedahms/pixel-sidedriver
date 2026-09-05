@@ -3,10 +3,10 @@
 #include "Constants/Constants.hpp"
 
 namespace Utils {
-    b2Vec2  vector2Tob2Vec2(Vector2 vector2) { return b2Vec2{vector2.x, vector2.y}; }
-    Vector2 b2Vec2ToVector2(b2Vec2 b2Vec2) { return Vector2{b2Vec2.x, b2Vec2.y}; }
+    b2Vec2  vector2Tob2Vec2(const Vector2 vector2) { return b2Vec2{vector2.x, vector2.y}; }
+    Vector2 b2Vec2ToVector2(const b2Vec2 b2Vec2) { return Vector2{b2Vec2.x, b2Vec2.y}; }
 
-    b2BodyId createBox(const b2WorldId worldId, b2Vec2 positionPixels, b2Vec2 sizePixels) {
+    b2BodyId createBox(const b2WorldId worldId, const b2Vec2 positionPixels, b2Vec2 sizePixels) {
         b2BodyDef boxDef = b2DefaultBodyDef();
         boxDef.type      = b2_dynamicBody;
         boxDef.position  = (b2Vec2){
@@ -22,7 +22,7 @@ namespace Utils {
         return boxId;
     }
 
-    b2BodyId createCircle(b2WorldId worldId, b2Vec2 positionPixels, float radius) {
+    b2BodyId createCircle(const b2WorldId worldId, const b2Vec2 positionPixels, const float radius) {
         b2BodyDef bodyDef     = b2DefaultBodyDef();
         bodyDef.type          = b2_dynamicBody;
         bodyDef.position      = {positionPixels.x / Constants::pixelsPerMeter, positionPixels.y / Constants::pixelsPerMeter};
