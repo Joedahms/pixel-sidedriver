@@ -49,10 +49,6 @@ add_executable(PixelSideDriver
         src/Game/Components/Tags/ShowClickInfoTag.hpp
         src/Game/Components/Tags/UnderConstructionTag.hpp
 
-        # Entities
-        src/Game/Entities/Ship/Ship.cpp
-        src/Game/Entities/Ship/Ship.hpp
-
         # Input
         src/Game/Input/ActionName.cpp
         src/Game/Input/ActionName.hpp
@@ -103,20 +99,14 @@ add_executable(PixelSideDriver
         src/Game/Entities/Star.hpp
         src/VelocityChangeEvent.hpp
         src/Game/Components/Mass.hpp
-        src/Game/Entities/Ship/Parts/Engine.cpp
-        src/Game/Entities/Ship/Parts/Engine.hpp
         src/Game/Components/Propulsion.hpp
         src/Game/Components/Force.hpp
-        src/Game/Entities/Ship/Parts/Hull.cpp
-        src/Game/Entities/Ship/Parts/Hull.hpp
         src/Game/Components/Tags/HullTag.hpp
         src/Game/GameplayState.hpp
         src/Game/Components/Tags/HeldTag.hpp
         src/Game/Systems/Held/HeldSystem.cpp
         src/Game/Systems/Held/HeldSystem.hpp
         src/Game/Components/Attachment.hpp
-        src/Game/Gui/ShipEditor/ShipEditor.cpp
-        src/Game/Gui/ShipEditor/ShipEditor.hpp
         src/Game/Inventory.hpp
         src/Game/Systems/Attachment/AttachmentSystem.cpp
         src/Game/Systems/Attachment/AttachmentSystem.hpp

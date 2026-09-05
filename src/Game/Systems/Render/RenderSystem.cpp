@@ -5,7 +5,6 @@
 
 #include "../../GameState.hpp"
 #include "../../Utils.hpp"
-#include "../../Components/Attachment.hpp"
 #include "../../Components/Body.hpp"
 #include "../../Components/DimensionsComponent.hpp"
 #include "../../Components/Radius.hpp"
@@ -127,24 +126,11 @@ namespace {
         }
     }
 
-    void renderAttachmentPoints(entt::registry &registry) {
-        for (const auto heldView = registry.view<Attachment, Transform2D, Sprite>(); const auto &
-             held: heldView) {
-            const auto &[attachment, transform , sprite] = heldView.get<
-                Attachment, Transform2D, Sprite>(held);
 
-            for (const auto [x, y]: attachment.attachmentPoints) {
-                DrawCircle(transform.position.x + x,
-                           transform.position.y + y,
-                           attachment.attachmentPointRadius,
-                           RED);
-            }
-        }
-    }
 }
 
 namespace RenderSystem {
-    void draw(const GameplayState gameplayState, entt::registry &registry) {
+    void draw(entt::registry &registry) {
         const Camera2D  camera          = registry.ctx().get<Camera2D>();
         const Rectangle screenRectangle = {
             .x = camera.target.x - camera.offset.x / camera.zoom,
@@ -155,6 +141,5 @@ namespace RenderSystem {
 
         renderRenderableEntities(screenRectangle, registry);
         renderEntityIds(registry);
-        if (gameplayState == GameplayState::ShipEditor) { renderAttachmentPoints(registry); }
     }
 }

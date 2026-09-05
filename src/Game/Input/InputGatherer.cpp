@@ -5,7 +5,6 @@
 
 #include "ActionName.hpp"
 #include "../GameTime.hpp"
-#include "../Gui/ShipEditor/ShipEditor.hpp"
 #include "../Systems/Background/BackgroundSystem.hpp"
 #include "../Systems/Held/HeldSystem.hpp"
 #include "../Systems/Player/PlayerSystem.hpp"
@@ -26,9 +25,6 @@ void InputGatherer::setup(entt::registry &registry) {
     entt::sink mouseButtonLeftPressedSink{mouseButtonLeftPressedSignal};
     mouseButtonLeftPressedSink.connect<&HeldSystem::handleMouseButtonLeftPressed>(registry);
 
-    entt::sink exitShipEditorSink{exitShipEditorSignal};
-    exitShipEditorSink.connect<&ShipEditor::exit>(registry);
-
     entt::sink rotatePartSink{rotatePartSignal};
     rotatePartSink.connect<&HeldSystem::handleRotatePart>(registry);
 }
@@ -45,20 +41,11 @@ void InputGatherer::checkKeys(GameState &gameState) const {
                             gameplayState == GameplayState::Normal) {
                             gameplayState = GameplayState::Paused;
                         }
-                        else if (gameplayState == GameplayState::ShipEditor) {
-                            gameplayState = GameplayState::Normal;
-                            exitShipEditorSignal.publish(gameState.registry);
-                        }
                         else { gameplayState = GameplayState::Normal; }
                         break;
                     }
                     case ActionName::ToggleDebugOverlay: {
                         gameState.drawDebugOverlay = !gameState.drawDebugOverlay;
-                        break;
-                    }
-                    // TODO: wire this up
-                    case ActionName::ToggleShipEditor: {
-                        toggleBuildSystemSignal.publish(gameState.registry);
                         break;
                     }
                     case ActionName::SimulationSpeedZero: {
@@ -77,7 +64,6 @@ void InputGatherer::checkKeys(GameState &gameState) const {
                         gameState.registry.ctx().get<GameTime>().simulationSpeed = 8;
                         break;
                     }
-                    case ActionName::RotatePart: { rotatePartSignal.publish(gameState.registry); }
                     default: ;
                 }
             }

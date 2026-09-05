@@ -28,7 +28,7 @@ struct InputBindings {
                 .keyName = getKeyName(KEY_ESCAPE),
                 .toggle = true,
                 .activeGameplayStates =
-                {GameplayState::Normal, GameplayState::Paused, GameplayState::ShipEditor}
+                {GameplayState::Normal, GameplayState::Paused }
             },
             {
                 .actionName = ActionName::IncreaseThrottle,
@@ -63,14 +63,14 @@ struct InputBindings {
                 .keyCode = KEY_GRAVE,
                 .keyName = getKeyName(KEY_GRAVE),
                 .toggle = true,
-                .activeGameplayStates = {GameplayState::Normal, GameplayState::ShipEditor}
+                .activeGameplayStates = {GameplayState::Normal, }
             },
             {
                 .actionName = ActionName::ToggleShipEditor,
                 .keyCode = KEY_B,
                 .keyName = getKeyName(KEY_B),
                 .toggle = true,
-                .activeGameplayStates = {GameplayState::Normal, GameplayState::ShipEditor}
+                .activeGameplayStates = {GameplayState::Normal, }
             },
             {
                 .actionName = ActionName::SimulationSpeedZero,
@@ -100,13 +100,7 @@ struct InputBindings {
                 .toggle = true,
                 .activeGameplayStates = {GameplayState::Normal}
             },
-            {
-                .actionName = ActionName::RotatePart,
-                .keyCode = KEY_R,
-                .keyName = getKeyName(KEY_R),
-                .toggle = true,
-                .activeGameplayStates = {GameplayState::ShipEditor}
-            }
+
         }
     };
 };

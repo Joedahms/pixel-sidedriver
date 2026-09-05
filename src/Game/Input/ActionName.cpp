@@ -24,8 +24,6 @@ auto toString(const ActionName actionName) -> std::string {
             return "Simulation Speed Two";
         case ActionName::SimulationSpeedThree:
             return "Simulation Speed Three";
-        case ActionName::RotatePart:
-            return "Rotate Part";
         default:
             return "Unknown Action Name";
     }

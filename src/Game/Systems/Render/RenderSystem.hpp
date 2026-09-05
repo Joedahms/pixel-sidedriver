@@ -4,5 +4,5 @@
 #include "../../GameplayState.hpp"
 
 namespace RenderSystem {
-    void draw(GameplayState gameplayState, entt::registry &registry);
+    void draw(entt::registry &registry);
 }

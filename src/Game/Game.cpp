@@ -14,7 +14,6 @@
 #include "Constants/Constants.hpp"
 #include "Entities/Wheel.hpp"
 #include "Entities/Ship/Rectangle.hpp"
-#include "Entities/Ship/Ship.hpp"
 #include "Gui/GuiManager.hpp"
 #include "Gui/DebugOverlay/DebugOverlay.hpp"
 #include "Input/InputGatherer.hpp"
@@ -91,11 +90,6 @@ void Game::update() {
         InputGatherer::checkMouseWheel(gameState);
         inputGatherer.checkMouseButtons(gameState);
     }
-    if (gameState.gameplayState == GameplayState::ShipEditor) {
-        HeldSystem::update(registry);
-        AttachmentSystem::update(registry);
-        inputGatherer.checkMouseButtons(gameState);
-    }
     inputGatherer.checkKeys(gameState);
 }
 
@@ -106,7 +100,7 @@ void Game::draw() {
 
     ClearBackground(BLACK);
 
-    RenderSystem::draw(gameState.gameplayState, registry);
+    RenderSystem::draw(registry);
 
     EndMode2D();
 
@@ -171,10 +165,6 @@ void Game::setupNewGame() {
         }
     }
     std::cout << boxes << std::endl;
-
-
-    //Ship::createPlayerShip(registry, {.x = 0, .y = 0});
-    //Ship::createNpcShip(registry, {100, 100});
 
     BackgroundSystem::createStartingBackground(registry);
 }

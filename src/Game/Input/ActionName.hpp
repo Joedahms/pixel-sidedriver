@@ -13,7 +13,6 @@ enum class ActionName {
     SimulationSpeedOne,
     SimulationSpeedTwo,
     SimulationSpeedThree,
-    RotatePart
 };
 
 auto toString(ActionName actionName) -> std::string;
