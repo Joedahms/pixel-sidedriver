@@ -94,14 +94,17 @@ namespace {
 
         for (const auto renderablesView = registry.view<Body, RectangleSize>(); const auto
              renderable: renderablesView) {
-            auto   [body, size] = renderablesView.get<Body, RectangleSize>(renderable);
-            b2Vec2 position     = b2Body_GetPosition(body.id);
-            DrawRectangleV(Vector2{
-                               position.x * Constants::pixelsPerMeter,
-                               position.y * Constants::pixelsPerMeter
-                           },
-                           Utils::b2Vec2ToVector2(size.value),
-                           RED);
+            auto        [body, size] = renderablesView.get<Body, RectangleSize>(renderable);
+            b2Transform transform    = b2Body_GetTransform(body.id);
+            DrawRectanglePro(Rectangle{
+                                 transform.p.x * Constants::pixelsPerMeter,
+                                 transform.p.y * Constants::pixelsPerMeter,
+                                 size.value.x,
+                                 size.value.y
+                             },
+                             {size.value.x / 2, size.value.y / 2},
+                             b2Rot_GetAngle(transform.q) * RAD2DEG,
+                             RED);
         }
 
         for (const auto renderablesView = registry.view<Body, Radius>(); const auto renderable:
@@ -125,8 +128,6 @@ namespace {
             DrawText(std::to_string(id).c_str(), x, y, 40, WHITE);
         }
     }
-
-
 }
 
 namespace RenderSystem {

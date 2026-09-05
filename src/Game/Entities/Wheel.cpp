@@ -2,6 +2,7 @@
 
 #include "Wheel.hpp"
 
+#include <iostream>
 #include <entt/entity/registry.hpp>
 
 #include "../Utils.hpp"
@@ -25,10 +26,14 @@ namespace Wheel {
             b2WheelJointDef jointDef     = b2DefaultWheelJointDef();
             jointDef.bodyIdA            = parentBodyId;
             jointDef.bodyIdB            = bodyId;
-            jointDef.localAnchorA       = {attachmentPoint.x / Constants::pixelsPerMeter, attachmentPoint.y / Constants::pixelsPerMeter};
+            jointDef.localAnchorA       =  {attachmentPoint.x / Constants::pixelsPerMeter, attachmentPoint.y / Constants::pixelsPerMeter};
             jointDef.localAnchorB       = {0,0};
             jointDef.enableSpring = true;
+            jointDef.hertz = 1;
+            jointDef.dampingRatio = .5;
             jointDef.enableLimit = true;
+            jointDef.enableMotor = true;
+            jointDef.maxMotorTorque = 5000;
             jointDef.localAxisA = {0, 1};
             registry.emplace<Joint>(wheel, b2CreateWheelJoint(worldId, &jointDef));
             registry.emplace<Relationship>(wheel, parent);

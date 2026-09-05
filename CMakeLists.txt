@@ -104,24 +104,16 @@ add_executable(PixelSideDriver
         src/Game/Components/Tags/HullTag.hpp
         src/Game/GameplayState.hpp
         src/Game/Components/Tags/HeldTag.hpp
-        src/Game/Systems/Held/HeldSystem.cpp
-        src/Game/Systems/Held/HeldSystem.hpp
         src/Game/Components/Attachment.hpp
         src/Game/Inventory.hpp
-        src/Game/Systems/Attachment/AttachmentSystem.cpp
-        src/Game/Systems/Attachment/AttachmentSystem.hpp
         src/Game/Components/Tags/SnappedTag.hpp
         src/Game/Components/ControlIntent.hpp
-        src/Game/Systems/ShipControl/ShipControlSystem.cpp
-        src/Game/Systems/ShipControl/ShipControlSystem.hpp
-        src/Game/Systems/Npc/NpcSystem.cpp
-        src/Game/Systems/Npc/NpcSystem.hpp
         src/Game/Components/Body.hpp
         src/Game/Components/Joint.hpp
         src/Game/Utils.hpp
         src/Game/Utils.cpp
-        src/Game/Entities/Ship/Rectangle.cpp
-        src/Game/Entities/Ship/Rectangle.hpp
+        src/Game/Entities/Rectangle.cpp
+        src/Game/Entities/Rectangle.hpp
         src/Game/Components/DimensionsComponent.hpp
         src/Game/Entities/Wheel.cpp
         src/Game/Entities/Wheel.hpp

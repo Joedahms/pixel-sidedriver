@@ -1,8 +1,11 @@
 #include "BackgroundSystem.hpp"
 
 #include <algorithm>
+#include <iostream>
+#include <box2d/math_functions.h>
 
 #include "raylib.h"
+#include "../../Components/Body.hpp"
 #include "../../Components/Sprite.hpp"
 #include "../../Components/Transform2D.hpp"
 #include "../../Components/Velocity.hpp"
@@ -111,7 +114,8 @@ namespace BackgroundSystem {
 
     void update(entt::registry &registry) {
         const auto    player         = registry.view<PlayerTag>().front();
-        const Vector2 playerVelocity = registry.get<Velocity>(player).value;
+       const b2Vec2 playerVelocity = b2Body_GetLinearVelocity(registry.get<Body>(player).id);
+        std::cout << playerVelocity.x << std::endl;
 
         for (int i = 0; i < 4; i++) {
             Vector2 spawnPosition;

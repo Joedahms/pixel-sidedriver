@@ -8,22 +8,20 @@
 
 #include "GameTime.hpp"
 #include "Inventory.hpp"
+#include "raymath.h"
 #include "TextureCache.hpp"
 #include "Utils.hpp"
 #include "../VelocityChangeEvent.hpp"
+#include "Components/Tags/PlayerTag.hpp"
 #include "Constants/Constants.hpp"
 #include "Entities/Wheel.hpp"
-#include "Entities/Ship/Rectangle.hpp"
+#include "Entities/Rectangle.hpp"
 #include "Gui/GuiManager.hpp"
 #include "Gui/DebugOverlay/DebugOverlay.hpp"
 #include "Input/InputGatherer.hpp"
-#include "Systems/Attachment/AttachmentSystem.hpp"
 #include "Systems/Background/BackgroundSystem.hpp"
 #include "Systems/Destroy/DestroySystem.hpp"
-#include "Systems/Held/HeldSystem.hpp"
-#include "Systems/Npc/NpcSystem.hpp"
 #include "Systems/Render/RenderSystem.hpp"
-#include "Systems/ShipControl/ShipControlSystem.hpp"
 #include "Systems/SpriteAnimation/SpriteAnimationSystem.hpp"
 
 Game::Game() {
@@ -76,8 +74,6 @@ void Game::update() {
     auto &registry = gameState.registry;
 
     if (gameState.gameplayState == GameplayState::Normal) {
-        NpcSystem::update(registry);
-        ShipControlSystem::update(registry);
         b2World_Step(registry.ctx().get<b2WorldId>(), registry.ctx().get<GameTime>().frameTime, 4);
         SpriteAnimationSystem::update(registry);
         DestroySystem::destroy(registry);
@@ -88,7 +84,17 @@ void Game::update() {
         updateTime();
 
         InputGatherer::checkMouseWheel(gameState);
-        inputGatherer.checkMouseButtons(gameState);
+
+        const entt::entity player             = registry.view<PlayerTag>().front();
+        const Vector2 playerPosition =
+                Vector2Scale(Utils::b2Vec2ToVector2(b2Body_GetPosition(registry.get<Body>(player).id)), Constants::pixelsPerMeter);
+        registry.ctx().get<Camera2D>().target = {playerPosition.x + 300, playerPosition.y - 300};
+
+        const b2Vec2 playerVelocity = b2Body_GetLinearVelocity(registry.get<Body>(player).id);
+        if (playerVelocity.x != 0 || playerVelocity.y != 0) {
+            auto &dispatcher = registry.ctx().get<entt::dispatcher>();
+            dispatcher.enqueue(VelocityChangeEvent{});
+        }
     }
     inputGatherer.checkKeys(gameState);
 }
@@ -137,19 +143,24 @@ void Game::setupNewGame() {
     b2WorldId worldId   = b2CreateWorld(&worldDef);
     registry.ctx().emplace<b2WorldId>(worldId);
 
+    /*
     b2BodyDef groundDef = b2DefaultBodyDef();
     groundDef.position = (b2Vec2){400 / Constants::pixelsPerMeter, 550 / Constants::pixelsPerMeter};
-    b2BodyId  groundId = b2CreateBody(worldId, &groundDef);
-    b2Polygon groundBox = b2MakeBox(5000 / Constants::pixelsPerMeter,
+    const b2BodyId  groundId = b2CreateBody(worldId, &groundDef);
+    const b2Polygon groundBox = b2MakeBox(5000 / Constants::pixelsPerMeter,
                                     10 / Constants::pixelsPerMeter);
-    b2ShapeDef groundShapeDef = b2DefaultShapeDef();
+    const b2ShapeDef groundShapeDef = b2DefaultShapeDef();
     b2CreatePolygonShape(groundId, &groundShapeDef, &groundBox);
+    */
 
-    entt::entity body = Dahms::Rectangle::createRectangle(registry, {100, -100}, {200, 40});
-    float radius = 30;
-    Wheel::createWheel(registry, {100, 0 - radius}, radius, body, {0, 40});
-    Wheel::createWheel(registry, {300, 0 - radius}, radius, body, {200, 40});
+    Dahms::Rectangle::createRectangle(registry, {400, 550}, {5000, 10}, b2_staticBody);
 
+    const entt::entity body = Dahms::Rectangle::createPlayerRectangle(registry, {0, 0}, {200, 40});
+    const float        radius = 30;
+    Wheel::createWheel(registry, {-100, 20}, radius, body, {-100, 20});
+    Wheel::createWheel(registry, {100, 20}, radius, body, {100, 20});
+
+    /*
     float size = 30;
     int gap = 2;
     int boxes = 0;
@@ -165,6 +176,7 @@ void Game::setupNewGame() {
         }
     }
     std::cout << boxes << std::endl;
+    */
 
     BackgroundSystem::createStartingBackground(registry);
 }

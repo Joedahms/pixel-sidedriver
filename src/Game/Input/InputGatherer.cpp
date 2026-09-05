@@ -6,27 +6,14 @@
 #include "ActionName.hpp"
 #include "../GameTime.hpp"
 #include "../Systems/Background/BackgroundSystem.hpp"
-#include "../Systems/Held/HeldSystem.hpp"
 #include "../Systems/Player/PlayerSystem.hpp"
 
 void InputGatherer::setup(entt::registry &registry) {
-    entt::sink increaseThrottleSink{increaseThrottleSignal};
-    increaseThrottleSink.connect<&PlayerSystem::handleIncreaseThrottle>(registry);
+    entt::sink throttleSink{throttleSignal};
+    throttleSink.connect<&PlayerSystem::handleThrottle>(registry);
 
-    entt::sink decreaseThrottleSink{decreaseThrottleSignal};
-    decreaseThrottleSink.connect<&PlayerSystem::handleDecreaseThrottle>(registry);
-
-    entt::sink playerRotateLeftSink{playerRotateLeftSignal};
-    playerRotateLeftSink.connect<&PlayerSystem::handleRotateCounterclockwise>(registry);
-
-    entt::sink playerRotateRightSink{playerRotateRightSignal};
-    playerRotateRightSink.connect<&PlayerSystem::handleRotateClockwise>(registry);
-
-    entt::sink mouseButtonLeftPressedSink{mouseButtonLeftPressedSignal};
-    mouseButtonLeftPressedSink.connect<&HeldSystem::handleMouseButtonLeftPressed>(registry);
-
-    entt::sink rotatePartSink{rotatePartSignal};
-    rotatePartSink.connect<&HeldSystem::handleRotatePart>(registry);
+    entt::sink brakeSink{brakeSignal};
+    brakeSink.connect<&PlayerSystem::handleBrake>(registry);
 }
 
 void InputGatherer::checkKeys(GameState &gameState) const {
@@ -71,36 +58,18 @@ void InputGatherer::checkKeys(GameState &gameState) const {
         else {
             if (IsKeyDown(inputBinding.keyCode)) {
                 switch (inputBinding.actionName) {
-                    case ActionName::IncreaseThrottle: {
-                        increaseThrottleSignal.publish(gameState.registry);
+                    case ActionName::Throttle: {
+                        throttleSignal.publish(gameState.registry);
                         break;
                     }
-                    case ActionName::DecreaseThrottle: {
-                        decreaseThrottleSignal.publish(gameState.registry);
-                        break;
-                    }
-                    case ActionName::RotateCounterclockwise: {
-                        playerRotateLeftSignal.publish(gameState.registry);
-                        break;
-                    }
-                    case ActionName::RotateClockwise: {
-                        playerRotateRightSignal.publish(gameState.registry);
+                    case ActionName::Brake: {
+                        brakeSignal.publish(gameState.registry);
                         break;
                     }
                     default: ;
                 }
             }
         }
-    }
-}
-
-void InputGatherer::checkMouseButtons(GameState &gameState) const {
-    if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
-        mouseButtonLeftPressedSignal.publish(gameState.registry);
-    }
-
-    if (IsMouseButtonDown(MOUSE_BUTTON_LEFT)) {
-        mouseButtonLeftDownSignal.publish(gameState.registry);
     }
 }
 

@@ -2,30 +2,24 @@
 
 #include "../../Components/Body.hpp"
 #include "../../Components/ControlIntent.hpp"
+#include "../../Components/Joint.hpp"
+#include "../../Components/Radius.hpp"
+#include "../../Components/Relationship.hpp"
 #include "../../Components/Tags/PlayerTag.hpp"
 
 namespace PlayerSystem {
-    void handleIncreaseThrottle(entt::registry &registry) {
-        auto &[throttleDelta, rotationDelta] = registry.get<
-            ControlIntent>(registry.view<PlayerTag, ControlIntent>().front());
-        throttleDelta = 100;
+    void handleThrottle(entt::registry &registry) {
+        const entt::entity player = registry.view<PlayerTag>().front();
+        for (const auto wheelsView = registry.view<Body, Joint, Radius, Relationship>(); const auto wheel : wheelsView) {
+            if (registry.get<Relationship>(wheel).parent == player) {
+                b2WheelJoint_SetMotorSpeed(registry.get<Joint>(wheel).id, 50);
+            }
+        }
     }
 
-    void handleDecreaseThrottle(entt::registry &registry) {
+    void handleBrake(entt::registry &registry) {
         auto &[throttleDelta, rotationDelta] = registry.get<
             ControlIntent>(registry.view<PlayerTag, ControlIntent>().front());
         //throttleDelta
-    }
-
-    void handleRotateCounterclockwise(entt::registry &registry) {
-        const entt::entity playerShip     = registry.view<PlayerTag>().front();
-        b2BodyId           playerShipBody = registry.get<Body>(playerShip).id;
-        b2Body_ApplyTorque(playerShipBody, -500.0, true);
-    }
-
-    void handleRotateClockwise(entt::registry &registry) {
-        const entt::entity playerShip     = registry.view<PlayerTag>().front();
-        b2BodyId           playerShipBody = registry.get<Body>(playerShip).id;
-        b2Body_ApplyTorque(playerShipBody, 500.0, true);
     }
 }

@@ -4,18 +4,12 @@ auto toString(const ActionName actionName) -> std::string {
     switch (actionName) {
         case ActionName::PauseGame:
             return "Pause Game";
-        case ActionName::IncreaseThrottle:
-            return "Increase Throttle";
-        case ActionName::DecreaseThrottle:
-            return "Decrease Throttle";
-        case ActionName::RotateCounterclockwise:
-            return "Rotate Counterclockwise";
-        case ActionName::RotateClockwise:
-            return "Rotate CounterClockwise";
+        case ActionName::Throttle:
+            return "Throttle";
+        case ActionName::Brake:
+            return "Brake";
         case ActionName::ToggleDebugOverlay:
             return "Toggle Debug Overlay";
-        case ActionName::ToggleShipEditor:
-            return "Toggle Build Mode";
         case ActionName::SimulationSpeedZero:
             return "Simulation Speed Zero";
         case ActionName::SimulationSpeedOne:

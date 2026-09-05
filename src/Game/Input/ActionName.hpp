@@ -3,12 +3,9 @@
 
 enum class ActionName {
     PauseGame,
-    IncreaseThrottle,
-    DecreaseThrottle,
-    RotateCounterclockwise,
-    RotateClockwise,
+    Throttle,
+    Brake,
     ToggleDebugOverlay,
-    ToggleShipEditor,
     SimulationSpeedZero,
     SimulationSpeedOne,
     SimulationSpeedTwo,

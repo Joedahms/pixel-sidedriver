@@ -17,7 +17,7 @@ struct InputBinding {
 };
 
 struct InputBindings {
-    static constexpr int numBindings     = 12;
+    static constexpr int numBindings     = 8;
     static constexpr int pauseGameAction = 0;
 
     std::array<InputBinding, numBindings> bindings = {
@@ -31,33 +31,20 @@ struct InputBindings {
                 {GameplayState::Normal, GameplayState::Paused }
             },
             {
-                .actionName = ActionName::IncreaseThrottle,
-                .keyCode = KEY_W,
-                .keyName = getKeyName(KEY_W),
-                .toggle = false,
-                .activeGameplayStates = {GameplayState::Normal}
-            },
-            {
-                .actionName = ActionName::DecreaseThrottle,
-                .keyCode = KEY_S,
-                .keyName = getKeyName(KEY_S),
-                .toggle = false,
-                .activeGameplayStates = {GameplayState::Normal}
-            },
-            {
-                .actionName = ActionName::RotateCounterclockwise,
-                .keyCode = KEY_A,
-                .keyName = getKeyName(KEY_A),
-                .toggle = false,
-                .activeGameplayStates = {GameplayState::Normal}
-            },
-            {
-                .actionName = ActionName::RotateClockwise,
+                .actionName = ActionName::Throttle,
                 .keyCode = KEY_D,
                 .keyName = getKeyName(KEY_D),
                 .toggle = false,
                 .activeGameplayStates = {GameplayState::Normal}
             },
+            {
+                .actionName = ActionName::Brake,
+                .keyCode = KEY_A,
+                .keyName = getKeyName(KEY_A),
+                .toggle = false,
+                .activeGameplayStates = {GameplayState::Normal}
+            },
+
             {
                 .actionName = ActionName::ToggleDebugOverlay,
                 .keyCode = KEY_GRAVE,
@@ -65,13 +52,7 @@ struct InputBindings {
                 .toggle = true,
                 .activeGameplayStates = {GameplayState::Normal, }
             },
-            {
-                .actionName = ActionName::ToggleShipEditor,
-                .keyCode = KEY_B,
-                .keyName = getKeyName(KEY_B),
-                .toggle = true,
-                .activeGameplayStates = {GameplayState::Normal, }
-            },
+
             {
                 .actionName = ActionName::SimulationSpeedZero,
                 .keyCode = KEY_SPACE,

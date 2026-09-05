@@ -10,7 +10,7 @@ namespace Utils {
 
     Vector2 b2Vec2ToVector2(b2Vec2 b2Vec2);
 
-    b2BodyId createBox(b2WorldId worldId, b2Vec2 positionPixels, b2Vec2 sizePixels);
+    b2BodyId createBox(b2WorldId worldId, b2Vec2 positionPixels, b2Vec2 sizePixels, b2BodyType bodyType);
 
     b2BodyId createCircle(b2WorldId worldId, b2Vec2 positionPixels, float radius);
 
