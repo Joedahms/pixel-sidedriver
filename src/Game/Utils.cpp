@@ -40,4 +40,19 @@ namespace Utils {
         b2CreateCircleShape(bodyId, &shapeDef, &circle);
         return bodyId;
     }
+
+    b2BodyId createChain(b2WorldId worldId) {
+        b2BodyDef bodyDef = b2DefaultBodyDef();
+        bodyDef.type = b2_staticBody;
+        b2BodyId chainBodyId = b2CreateBody(worldId, &bodyDef);
+
+        b2Vec2 points[4] {{0, 0}, {50 / Constants::pixelsPerMeter, 0}, {100/ Constants::pixelsPerMeter, 0}, {150/Constants::pixelsPerMeter, 0}};
+        b2ChainDef chainDef = b2DefaultChainDef();
+        chainDef.points = points;
+        chainDef.count = 4;
+        chainDef.isLoop = false;
+        b2CreateChain(chainBodyId, &chainDef);
+
+        return chainBodyId;
+    }
 }

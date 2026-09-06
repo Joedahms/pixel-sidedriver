@@ -8,7 +8,6 @@
 #include "../../Components/Body.hpp"
 #include "../../Components/Sprite.hpp"
 #include "../../Components/Transform2D.hpp"
-#include "../../Components/Velocity.hpp"
 #include "../../Components/Tags/DestroyTag.hpp"
 #include "../../Components/Tags/PlayerTag.hpp"
 #include "../../Components/Tags/StarTag.hpp"

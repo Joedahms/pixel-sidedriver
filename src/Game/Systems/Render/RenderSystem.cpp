@@ -6,13 +6,14 @@
 #include "../../GameState.hpp"
 #include "../../Utils.hpp"
 #include "../../Components/Body.hpp"
-#include "../../Components/DimensionsComponent.hpp"
+#include "../../Components/Chain.hpp"
 #include "../../Components/Radius.hpp"
 #include "../../Components/RectangleSize.hpp"
 #include "../../Components/Sprite.hpp"
 #include "../../Components/Transform2D.hpp"
 #include "../../Components/Tags/ShowClickInfoTag.hpp"
 #include "../../Constants/Constants.hpp"
+#include "../../Entities/Ground.hpp"
 
 namespace {
     void renderEntity(const Rectangle     screenRectangle,
@@ -118,6 +119,13 @@ namespace {
                         radius.value,
                         RED);
         }
+
+        /*
+        const entt::entity ground = registry.view<Body, Chain>().front();
+        const Chain chain = registry.get<Chain>(ground);
+        DrawLineStrip(chain.points.data(), chain.pointCount, RED);
+        */
+
     }
 
     void renderEntityIds(entt::registry &registry) {

@@ -1,7 +1,6 @@
 #include "PlayerSystem.hpp"
 
 #include "../../Components/Body.hpp"
-#include "../../Components/ControlIntent.hpp"
 #include "../../Components/Joint.hpp"
 #include "../../Components/Radius.hpp"
 #include "../../Components/Relationship.hpp"
@@ -18,8 +17,6 @@ namespace PlayerSystem {
     }
 
     void handleBrake(entt::registry &registry) {
-        auto &[throttleDelta, rotationDelta] = registry.get<
-            ControlIntent>(registry.view<PlayerTag, ControlIntent>().front());
-        //throttleDelta
+
     }
 }
