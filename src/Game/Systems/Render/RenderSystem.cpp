@@ -4,11 +4,7 @@
 #include <raymath.h>
 
 #include "../../GameState.hpp"
-#include "../../Utils.hpp"
 #include "../../Components/Body.hpp"
-#include "../../Components/Chain.hpp"
-#include "../../Components/Radius.hpp"
-#include "../../Components/RectangleSize.hpp"
 #include "../../Components/Sprite.hpp"
 #include "../../Components/Transform2D.hpp"
 #include "../../Components/Tags/ShowClickInfoTag.hpp"
@@ -79,6 +75,41 @@ namespace {
         }
     }
 
+    void renderCircle(const Body body) {
+        const b2Circle circle   = b2Shape_GetCircle(body.shapeId);
+        const b2Vec2   position = b2Body_GetPosition(body.bodyId);
+        DrawCircleV(Vector2{
+                        position.x * Constants::pixelsPerMeter,
+                        position.y * Constants::pixelsPerMeter
+                    },
+                    circle.radius * Constants::pixelsPerMeter,
+                    RED);
+    }
+
+    void renderPolygon(const Body body) {
+        const b2Transform transform = b2Body_GetTransform(body.bodyId);
+        const b2Polygon   polygon   = b2Shape_GetPolygon(body.shapeId);
+
+        Vector2 fanPoints[B2_MAX_POLYGON_VERTICES + 1];
+        for (int i = 0; i < polygon.count; i++) {
+            b2Vec2 transformedPoint = b2TransformPoint(transform,
+                                                       polygon.vertices[polygon.count - 1 - i]);
+            fanPoints[i].x = transformedPoint.x * Constants::pixelsPerMeter;
+            fanPoints[i].y = transformedPoint.y * Constants::pixelsPerMeter;
+        }
+        DrawTriangleFan(fanPoints, polygon.count, RED);
+    }
+
+    void renderChainSegment(const Body body) {
+        const b2ShapeId      id           = body.shapeId;
+        const b2ChainSegment chainSegment = b2Shape_GetChainSegment(id);
+        const b2Segment      segment      = chainSegment.segment;
+        DrawLineEx({segment.point1.x, segment.point1.y},
+                   {segment.point2.x, segment.point2.y},
+                   10,
+                   RED);
+    }
+
     void renderRenderableEntities(const Rectangle screenRectangle, entt::registry &registry) {
         for (const auto renderablesView = registry.view<Transform2D, Sprite>(); const auto
              renderable: renderablesView) {
@@ -89,43 +120,31 @@ namespace {
         for (const auto renderablesView = registry.view<Body, Sprite>(); const auto renderable:
              renderablesView) {
             auto        [body, sprite] = renderablesView.get<Body, Sprite>(renderable);
-            b2Transform transform      = b2Body_GetTransform(body.id);
+            const b2Transform transform      = b2Body_GetTransform(body.bodyId);
             renderEntity(screenRectangle, transform, sprite, 255);
         }
 
-        for (const auto renderablesView = registry.view<Body, RectangleSize>(); const auto
+        for (const auto renderablesView = registry.view<Body>(entt::exclude<Sprite>); const auto
              renderable: renderablesView) {
-            auto        [body, size] = renderablesView.get<Body, RectangleSize>(renderable);
-            b2Transform transform    = b2Body_GetTransform(body.id);
-            DrawRectanglePro(Rectangle{
-                                 transform.p.x * Constants::pixelsPerMeter,
-                                 transform.p.y * Constants::pixelsPerMeter,
-                                 size.value.x,
-                                 size.value.y
-                             },
-                             {size.value.x / 2, size.value.y / 2},
-                             b2Rot_GetAngle(transform.q) * RAD2DEG,
-                             RED);
+            switch (const Body body = renderablesView.get<Body>(renderable);
+                b2Shape_GetType(body.shapeId)) {
+                case b2_circleShape: {
+                    renderCircle(body);
+                    break;
+                }
+                case b2_capsuleShape: { break; }
+                case b2_segmentShape: { break; }
+                case b2_polygonShape: {
+                    renderPolygon(body);
+                    break;
+                }
+                case b2_chainSegmentShape: {
+                    renderChainSegment(body);
+                    break;
+                }
+                default: {}
+            }
         }
-
-        for (const auto renderablesView = registry.view<Body, Radius>(); const auto renderable:
-             renderablesView) {
-            auto   [body, radius] = renderablesView.get<Body, Radius>(renderable);
-            b2Vec2 position       = b2Body_GetPosition(body.id);
-            DrawCircleV(Vector2{
-                            position.x * Constants::pixelsPerMeter,
-                            position.y * Constants::pixelsPerMeter
-                        },
-                        radius.value,
-                        RED);
-        }
-
-        /*
-        const entt::entity ground = registry.view<Body, Chain>().front();
-        const Chain chain = registry.get<Chain>(ground);
-        DrawLineStrip(chain.points.data(), chain.pointCount, RED);
-        */
-
     }
 
     void renderEntityIds(entt::registry &registry) {

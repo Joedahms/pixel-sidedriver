@@ -101,15 +101,14 @@ add_executable(PixelSideDriver
         src/Game/Components/Joint.hpp
         src/Game/Utils.hpp
         src/Game/Utils.cpp
-        src/Game/Entities/Rectangle.cpp
-        src/Game/Entities/Rectangle.hpp
+        src/Game/Entities/Box.cpp
+        src/Game/Entities/Box.hpp
         src/Game/Entities/Wheel.cpp
         src/Game/Entities/Wheel.hpp
-        src/Game/Components/Radius.hpp
-        src/Game/Components/RectangleSize.hpp
         src/Game/Entities/Ground.cpp
         src/Game/Entities/Ground.hpp
-        src/Game/Components/Chain.hpp
+        src/Game/Components/Body.hpp
+        src/Game/Components/Tags/WheelTag.hpp
 )
 
 target_link_libraries(PixelSideDriver

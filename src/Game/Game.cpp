@@ -11,11 +11,11 @@
 #include "Utils.hpp"
 #include "../VelocityChangeEvent.hpp"
 #include "Components/Joint.hpp"
-#include "Components/Radius.hpp"
 #include "Components/Tags/PlayerTag.hpp"
+#include "Components/Tags/WheelTag.hpp"
 #include "Constants/Constants.hpp"
 #include "Entities/Ground.hpp"
-#include "Entities/Rectangle.hpp"
+#include "Entities/Box.hpp"
 #include "Entities/Wheel.hpp"
 #include "Gui/GuiManager.hpp"
 #include "Gui/DebugOverlay/DebugOverlay.hpp"
@@ -77,7 +77,7 @@ void Game::update() {
     if (gameState.gameplayState == GameplayState::Normal) {
         b2World_Step(registry.ctx().get<b2WorldId>(), registry.ctx().get<GameTime>().frameTime, 4);
 
-        for (const auto wheelView = registry.view<Body, Radius, Joint>(); const auto wheel: wheelView) {
+        for (const auto wheelView = registry.view<Body, Joint, WheelTag>(); const auto wheel: wheelView) {
             const auto joint = wheelView.get<Joint>(wheel).id;
             b2WheelJoint_SetMotorSpeed(joint, 0);
         }
@@ -95,11 +95,11 @@ void Game::update() {
         const entt::entity player         = registry.view<PlayerTag>().front();
         const Vector2      playerPosition =
                 Vector2Scale(Utils::b2Vec2ToVector2(b2Body_GetPosition(registry.get<Body>(player).
-                                                     id)),
+                                                     bodyId)),
                              Constants::pixelsPerMeter);
         registry.ctx().get<Camera2D>().target = {playerPosition.x + 300, playerPosition.y - 300};
 
-        const b2Vec2 playerVelocity = b2Body_GetLinearVelocity(registry.get<Body>(player).id);
+        const b2Vec2 playerVelocity = b2Body_GetLinearVelocity(registry.get<Body>(player).bodyId);
         if (playerVelocity.x != 0 || playerVelocity.y != 0) {
             auto &dispatcher = registry.ctx().get<entt::dispatcher>();
             dispatcher.enqueue(VelocityChangeEvent{});
@@ -152,10 +152,10 @@ void Game::setupNewGame() {
     b2WorldId worldId   = b2CreateWorld(&worldDef);
     registry.ctx().emplace<b2WorldId>(worldId);
 
-    Dahms::Rectangle::createRectangle(registry, {400, 550}, {20000, 10}, b2_staticBody);
+    Box::createBox(registry, {400, 550}, {20000, 10}, b2_staticBody);
     //Ground::createGround(registry);
 
-    const entt::entity body = Dahms::Rectangle::createPlayerRectangle(registry, {0, -100}, {200, 40});
+    const entt::entity body = Box::createPlayerBox(registry, {0, -100}, {200, 40});
     const float        radius = 30;
     Wheel::createWheel(registry, {-200, 20}, radius, body, {-100, 20});
     Wheel::createWheel(registry, {200, 20}, radius, body, {100, 20});

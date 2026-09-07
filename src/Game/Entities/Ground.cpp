@@ -1,18 +1,32 @@
 #include "Ground.hpp"
 
-#include "../Utils.hpp"
 #include "../Components/Body.hpp"
-#include "../Components/Chain.hpp"
+#include "../Constants/Constants.hpp"
 
 namespace Ground {
     void createGround(entt::registry &registry) {
-        const entt::entity ground = registry.create();
+        b2BodyDef bodyDef    = b2DefaultBodyDef();
+        bodyDef.type         = b2_staticBody;
+        b2BodyId chainBodyId = b2CreateBody(registry.ctx().get<b2WorldId>(), &bodyDef);
 
-        int pointCount = 4;
-        std::vector<Vector2> points =
-        {{0, 0}, {50, 0}, {100, 0}, {150, 0}};
+        const b2Vec2 points[4]{
+            {0, 0},
+            {50 / Constants::pixelsPerMeter, 0},
+            {100 / Constants::pixelsPerMeter, 0},
+            {150 / Constants::pixelsPerMeter, 0}
+        };
+        b2ChainDef chainDef = b2DefaultChainDef();
+        chainDef.points     = points;
+        chainDef.count      = 4;
+        chainDef.isLoop     = false;
+        const b2ChainId chainId   = b2CreateChain(chainBodyId, &chainDef);
 
-        //registry.emplace<Body>(ground, Utils::createChain(registry.ctx().get<b2WorldId>()));
-        //registry.emplace<Chain>(ground, 4, std::vector<Vector2>{{0, 0}, {50, 0}, {100, 0}, {150, 0}});
+        b2ShapeId chainSegments[4];
+        b2Chain_GetSegments(chainId, chainSegments, 4);
+
+        for (int i = 0; i < 4; i++) {
+            const entt::entity ground = registry.create();
+            registry.emplace<Body>(ground, chainBodyId, chainSegments[i]);
+        }
     }
 }

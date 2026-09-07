@@ -38,7 +38,7 @@ namespace DebugOverlay {
                     playerTransform.position.y);
         ImGui::Text("Player Rotation: %f", playerTransform.rotationDegrees);
 
-        const auto playerVelocity = b2Body_GetLinearVelocity(registry.get<Body>(player).id);
+        const auto playerVelocity = b2Body_GetLinearVelocity(registry.get<Body>(player).bodyId);
         ImGui::Text("Player Velocity: %f, %f", playerVelocity.x, playerVelocity.y);
 
         ImGui::Text("Frame Time: %f", frameTimeValue);

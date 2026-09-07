@@ -2,6 +2,7 @@
 #include <box2d/box2d.h>
 
 struct Body {
-    b2BodyId id;
+    b2BodyId bodyId;
+    b2ShapeId shapeId;
 };
 
