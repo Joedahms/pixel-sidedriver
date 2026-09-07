@@ -165,7 +165,7 @@ void Game::setupNewGame() {
     int boxes = 0;
     for (float x = -800; x < 800; x = x + size + gap) {
         for (float y = 0; y < 500; y = y + size / 2) {
-            Dahms::Rectangle::createRectangle(registry,
+            Box::createBox(registry,
                                   {
                                       x,
                                    y
