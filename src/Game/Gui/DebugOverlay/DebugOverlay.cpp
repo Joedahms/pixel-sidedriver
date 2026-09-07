@@ -4,9 +4,8 @@
 #include <raylib.h>
 #include <entt/entity/registry.hpp>
 
-#include "../../Components/Acceleration.hpp"
+#include "../../Components/Body.hpp"
 #include "../../Components/Transform2D.hpp"
-#include "../../Components/Velocity.hpp"
 #include "../../Components/Tags/PlayerTag.hpp"
 
 namespace DebugOverlay {
@@ -39,11 +38,8 @@ namespace DebugOverlay {
                     playerTransform.position.y);
         ImGui::Text("Player Rotation: %f", playerTransform.rotationDegrees);
 
-        const auto playerVelocity = registry.get<Velocity>(player).value;
+        const auto playerVelocity = b2Body_GetLinearVelocity(registry.get<Body>(player).bodyId);
         ImGui::Text("Player Velocity: %f, %f", playerVelocity.x, playerVelocity.y);
-
-        const auto playerAcceleration = registry.get<Acceleration>(player).value;
-        ImGui::Text("PlayerAcceleration: %f, %f", playerAcceleration.x, playerAcceleration.y);
 
         ImGui::Text("Frame Time: %f", frameTimeValue);
         ImGui::End();

@@ -4,18 +4,19 @@
 
 #include "Game.hpp"
 
-#include <iostream>
-
 #include "GameTime.hpp"
 #include "Inventory.hpp"
 #include "raymath.h"
 #include "TextureCache.hpp"
 #include "Utils.hpp"
 #include "../VelocityChangeEvent.hpp"
+#include "Components/Joint.hpp"
 #include "Components/Tags/PlayerTag.hpp"
+#include "Components/Tags/WheelTag.hpp"
 #include "Constants/Constants.hpp"
+#include "Entities/Box.hpp"
+#include "Entities/Ground.hpp"
 #include "Entities/Wheel.hpp"
-#include "Entities/Rectangle.hpp"
 #include "Gui/GuiManager.hpp"
 #include "Gui/DebugOverlay/DebugOverlay.hpp"
 #include "Input/InputGatherer.hpp"
@@ -75,6 +76,12 @@ void Game::update() {
 
     if (gameState.gameplayState == GameplayState::Normal) {
         b2World_Step(registry.ctx().get<b2WorldId>(), registry.ctx().get<GameTime>().frameTime, 4);
+
+        for (const auto wheelView = registry.view<Body, Joint, WheelTag>(); const auto wheel: wheelView) {
+            const auto joint = wheelView.get<Joint>(wheel).id;
+            b2WheelJoint_SetMotorSpeed(joint, 0);
+        }
+
         SpriteAnimationSystem::update(registry);
         DestroySystem::destroy(registry);
 
@@ -85,12 +92,14 @@ void Game::update() {
 
         InputGatherer::checkMouseWheel(gameState);
 
-        const entt::entity player             = registry.view<PlayerTag>().front();
-        const Vector2 playerPosition =
-                Vector2Scale(Utils::b2Vec2ToVector2(b2Body_GetPosition(registry.get<Body>(player).id)), Constants::pixelsPerMeter);
+        const entt::entity player         = registry.view<PlayerTag>().front();
+        const Vector2      playerPosition =
+                Vector2Scale(Utils::b2Vec2ToVector2(b2Body_GetPosition(registry.get<Body>(player).
+                                                     bodyId)),
+                             Constants::pixelsPerMeter);
         registry.ctx().get<Camera2D>().target = {playerPosition.x + 300, playerPosition.y - 300};
 
-        const b2Vec2 playerVelocity = b2Body_GetLinearVelocity(registry.get<Body>(player).id);
+        const b2Vec2 playerVelocity = b2Body_GetLinearVelocity(registry.get<Body>(player).bodyId);
         if (playerVelocity.x != 0 || playerVelocity.y != 0) {
             auto &dispatcher = registry.ctx().get<entt::dispatcher>();
             dispatcher.enqueue(VelocityChangeEvent{});
@@ -143,22 +152,12 @@ void Game::setupNewGame() {
     b2WorldId worldId   = b2CreateWorld(&worldDef);
     registry.ctx().emplace<b2WorldId>(worldId);
 
-    /*
-    b2BodyDef groundDef = b2DefaultBodyDef();
-    groundDef.position = (b2Vec2){400 / Constants::pixelsPerMeter, 550 / Constants::pixelsPerMeter};
-    const b2BodyId  groundId = b2CreateBody(worldId, &groundDef);
-    const b2Polygon groundBox = b2MakeBox(5000 / Constants::pixelsPerMeter,
-                                    10 / Constants::pixelsPerMeter);
-    const b2ShapeDef groundShapeDef = b2DefaultShapeDef();
-    b2CreatePolygonShape(groundId, &groundShapeDef, &groundBox);
-    */
+    Ground::createGround(registry);
 
-    Dahms::Rectangle::createRectangle(registry, {400, 550}, {5000, 10}, b2_staticBody);
-
-    const entt::entity body = Dahms::Rectangle::createPlayerRectangle(registry, {0, 0}, {200, 40});
+    const entt::entity body = Box::createPlayerBox(registry, {0, -100}, {200, 40});
     const float        radius = 30;
-    Wheel::createWheel(registry, {-100, 20}, radius, body, {-100, 20});
-    Wheel::createWheel(registry, {100, 20}, radius, body, {100, 20});
+    Wheel::createWheel(registry, {-200, 20}, radius, body, {-100, 20});
+    Wheel::createWheel(registry, {200, 20}, radius, body, {100, 20});
 
     /*
     float size = 30;
@@ -166,16 +165,15 @@ void Game::setupNewGame() {
     int boxes = 0;
     for (float x = -800; x < 800; x = x + size + gap) {
         for (float y = 0; y < 500; y = y + size / 2) {
-            Dahms::Rectangle::createRectangle(registry,
+            Box::createBox(registry,
                                   {
                                       x,
                                    y
                                   },
-                                  {size / 2, size / 2});
+                                  {size / 2, size / 2},b2_dynamicBody);
             boxes++;
         }
     }
-    std::cout << boxes << std::endl;
     */
 
     BackgroundSystem::createStartingBackground(registry);

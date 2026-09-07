@@ -37,17 +37,14 @@ add_executable(PixelSideDriver
         src/Game/Constants/Constants.hpp
 
         # Components
-        src/Game/Components/Acceleration.hpp
         src/Game/Components/Relationship.hpp
         src/Game/Components/Sprite.hpp
         src/Game/Components/SpriteAnimation.hpp
-        src/Game/Components/Velocity.hpp
 
         # Components - Tags
         src/Game/Components/Tags/DestroyTag.hpp
         src/Game/Components/Tags/HasClickInfoTag.hpp
         src/Game/Components/Tags/ShowClickInfoTag.hpp
-        src/Game/Components/Tags/UnderConstructionTag.hpp
 
         # Input
         src/Game/Input/ActionName.cpp
@@ -98,27 +95,20 @@ add_executable(PixelSideDriver
         src/Game/Entities/Star.cpp
         src/Game/Entities/Star.hpp
         src/VelocityChangeEvent.hpp
-        src/Game/Components/Mass.hpp
-        src/Game/Components/Propulsion.hpp
-        src/Game/Components/Force.hpp
-        src/Game/Components/Tags/HullTag.hpp
         src/Game/GameplayState.hpp
-        src/Game/Components/Tags/HeldTag.hpp
-        src/Game/Components/Attachment.hpp
         src/Game/Inventory.hpp
-        src/Game/Components/Tags/SnappedTag.hpp
-        src/Game/Components/ControlIntent.hpp
         src/Game/Components/Body.hpp
         src/Game/Components/Joint.hpp
         src/Game/Utils.hpp
         src/Game/Utils.cpp
-        src/Game/Entities/Rectangle.cpp
-        src/Game/Entities/Rectangle.hpp
-        src/Game/Components/DimensionsComponent.hpp
+        src/Game/Entities/Box.cpp
+        src/Game/Entities/Box.hpp
         src/Game/Entities/Wheel.cpp
         src/Game/Entities/Wheel.hpp
-        src/Game/Components/Radius.hpp
-        src/Game/Components/RectangleSize.hpp
+        src/Game/Entities/Ground.cpp
+        src/Game/Entities/Ground.hpp
+        src/Game/Components/Body.hpp
+        src/Game/Components/Tags/WheelTag.hpp
 )
 
 target_link_libraries(PixelSideDriver
