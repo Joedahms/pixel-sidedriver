@@ -37,7 +37,6 @@ namespace Wheel {
 
         b2ShapeId shapeId = b2CreateCircleShape(bodyId, &shapeDef, &circle);
 
-        //b2BodyId bodyId = Utils::createCircle(worldId, position, radius);
         registry.emplace<Body>(wheel, bodyId, shapeId);
 
         if (parent != entt::null) {

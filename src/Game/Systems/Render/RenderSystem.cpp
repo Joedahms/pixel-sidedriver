@@ -101,11 +101,14 @@ namespace {
     }
 
     void renderChainSegment(const Body body) {
+        const b2Transform transform = b2Body_GetTransform(body.bodyId);
         const b2ShapeId      id           = body.shapeId;
         const b2ChainSegment chainSegment = b2Shape_GetChainSegment(id);
         const b2Segment      segment      = chainSegment.segment;
-        DrawLineEx({segment.point1.x, segment.point1.y},
-                   {segment.point2.x, segment.point2.y},
+        const b2Vec2 point1 = b2TransformPoint(transform, segment.point1);
+        const b2Vec2 point2 = b2TransformPoint(transform, segment.point2);
+        DrawLineEx({point1.x * Constants::pixelsPerMeter, point1.y * Constants::pixelsPerMeter},
+                   {point2.x * Constants::pixelsPerMeter, point2.y * Constants::pixelsPerMeter},
                    10,
                    RED);
     }

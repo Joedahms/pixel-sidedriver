@@ -14,8 +14,8 @@
 #include "Components/Tags/PlayerTag.hpp"
 #include "Components/Tags/WheelTag.hpp"
 #include "Constants/Constants.hpp"
-#include "Entities/Ground.hpp"
 #include "Entities/Box.hpp"
+#include "Entities/Ground.hpp"
 #include "Entities/Wheel.hpp"
 #include "Gui/GuiManager.hpp"
 #include "Gui/DebugOverlay/DebugOverlay.hpp"
@@ -152,8 +152,7 @@ void Game::setupNewGame() {
     b2WorldId worldId   = b2CreateWorld(&worldDef);
     registry.ctx().emplace<b2WorldId>(worldId);
 
-    Box::createBox(registry, {400, 550}, {20000, 10}, b2_staticBody);
-    //Ground::createGround(registry);
+    Ground::createGround(registry);
 
     const entt::entity body = Box::createPlayerBox(registry, {0, -100}, {200, 40});
     const float        radius = 30;
