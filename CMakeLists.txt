@@ -109,11 +109,19 @@ add_executable(PixelSideDriver
         src/Game/Entities/Ground.hpp
         src/Game/Components/Body.hpp
         src/Game/Components/Tags/WheelTag.hpp
+        ignoreMe/WheelWithOutlineAlgorithm.cpp
+        src/Game/PixelUtils.cpp
+        src/Game/PixelUtils.hpp
+        src/Game/ImageImporter.cpp
+        src/Game/ImageImporter.hpp
+        src/Game/Components/Tags/LayerOneTag.hpp
+        src/Game/Components/Tags/LayerTwoTag.hpp
+        src/Game/Components/Tags/LayerThreeTag.hpp
 )
 
 target_link_libraries(PixelSideDriver
         raylib EnTT::EnTT imgui::imgui box2d::box2d)
-target_compile_options(PixelSideDriver PRIVATE -Os)
+#target_compile_options(PixelSideDriver PRIVATE -Os)
 
 # Copy assets next to the executable so the build output is relocatable
 add_custom_command(TARGET PixelSideDriver POST_BUILD

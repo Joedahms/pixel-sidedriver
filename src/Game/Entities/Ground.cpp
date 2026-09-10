@@ -3,6 +3,7 @@
 #include <vector>
 
 #include "../Components/Body.hpp"
+#include "../Components/Tags/LayerTwoTag.hpp"
 #include "../Constants/Constants.hpp"
 
 namespace Ground {
@@ -38,7 +39,8 @@ namespace Ground {
 
         for (int i = 0; i < segmentCount; i++) {
             const entt::entity ground = registry.create();
-            registry.emplace<Body>(ground, chainBodyId, chainSegments[i]);
+            registry.emplace<Body>(ground, chainBodyId, std::vector{std::pair{chainSegments[i], RED}});
+            registry.emplace<LayerTwoTag>(ground);
         }
     }
 }

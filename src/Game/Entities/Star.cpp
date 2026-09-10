@@ -3,6 +3,7 @@
 #include "../TextureCache.hpp"
 #include "../Components/Sprite.hpp"
 #include "../Components/Transform2D.hpp"
+#include "../Components/Tags/LayerOneTag.hpp"
 #include "../Components/Tags/StarTag.hpp"
 
 namespace Star {
@@ -14,6 +15,7 @@ namespace Star {
         registry.emplace<StarTag>(star);
         registry.emplace<Transform2D>(star, transform);
         registry.emplace<Sprite>(star, sprite);
+        registry.emplace<LayerOneTag>(star);
 
         return star;
     }

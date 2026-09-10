@@ -5,16 +5,16 @@
 #include "Game.hpp"
 
 #include "GameTime.hpp"
+#include "ImageImporter.hpp"
 #include "Inventory.hpp"
 #include "raymath.h"
-#include "TextureCache.hpp"
 #include "Utils.hpp"
 #include "../VelocityChangeEvent.hpp"
 #include "Components/Joint.hpp"
+#include "Components/Tags/LayerTwoTag.hpp"
 #include "Components/Tags/PlayerTag.hpp"
 #include "Components/Tags/WheelTag.hpp"
 #include "Constants/Constants.hpp"
-#include "Entities/Box.hpp"
 #include "Entities/Ground.hpp"
 #include "Entities/Wheel.hpp"
 #include "Gui/GuiManager.hpp"
@@ -77,7 +77,8 @@ void Game::update() {
     if (gameState.gameplayState == GameplayState::Normal) {
         b2World_Step(registry.ctx().get<b2WorldId>(), registry.ctx().get<GameTime>().frameTime, 4);
 
-        for (const auto wheelView = registry.view<Body, Joint, WheelTag>(); const auto wheel: wheelView) {
+        for (const auto wheelView = registry.view<Body, Joint, WheelTag>(); const auto wheel:
+             wheelView) {
             const auto joint = wheelView.get<Joint>(wheel).id;
             b2WheelJoint_SetMotorSpeed(joint, 0);
         }
@@ -97,7 +98,7 @@ void Game::update() {
                 Vector2Scale(Utils::b2Vec2ToVector2(b2Body_GetPosition(registry.get<Body>(player).
                                                      bodyId)),
                              Constants::pixelsPerMeter);
-        registry.ctx().get<Camera2D>().target = {playerPosition.x + 300, playerPosition.y - 300};
+        registry.ctx().get<Camera2D>().target = {playerPosition.x + 700, playerPosition.y + 100};
 
         const b2Vec2 playerVelocity = b2Body_GetLinearVelocity(registry.get<Body>(player).bodyId);
         if (playerVelocity.x != 0 || playerVelocity.y != 0) {
@@ -135,7 +136,7 @@ void Game::setupCamera() {
         .y = static_cast<float>(GetRenderHeight()) / 2
     };
     rotation = 0;
-    zoom     = static_cast<float>(initialZoom);
+    zoom     = initialZoom;
 }
 
 void Game::setupNewGame() {
@@ -154,27 +155,23 @@ void Game::setupNewGame() {
 
     Ground::createGround(registry);
 
-    const entt::entity body = Box::createPlayerBox(registry, {0, -100}, {200, 40});
-    const float        radius = 30;
-    Wheel::createWheel(registry, {-200, 20}, radius, body, {-100, 20});
-    Wheel::createWheel(registry, {200, 20}, radius, body, {100, 20});
+    constexpr b2Vec2 playerStartingPosition = {.x = 0, .y = -500};
+    const Body playerBody = ImageImporter::importImage("sprites/truck_body.png",
+                                                       playerStartingPosition,
+                                                       worldId);
+    const entt::entity player = registry.create();
+    registry.emplace<Body>(player, playerBody);
+    registry.emplace<PlayerTag>(player);
+    registry.emplace<LayerTwoTag>(player);
 
-    /*
-    float size = 30;
-    int gap = 2;
-    int boxes = 0;
-    for (float x = -800; x < 800; x = x + size + gap) {
-        for (float y = 0; y < 500; y = y + size / 2) {
-            Box::createBox(registry,
-                                  {
-                                      x,
-                                   y
-                                  },
-                                  {size / 2, size / 2},b2_dynamicBody);
-            boxes++;
-        }
-    }
-    */
+    Wheel::createWheel(registry,
+                       {20 * 16 + playerStartingPosition.x, 32 * 16 + playerStartingPosition.y},
+                       player,
+                       {20 * 16, 32 * 16});
+    Wheel::createWheel(registry,
+                       {75 * 16 + playerStartingPosition.x, 32 * 16 + playerStartingPosition.y},
+                       player,
+                       {75 * 16, 32 * 16});
 
     BackgroundSystem::createStartingBackground(registry);
 }
