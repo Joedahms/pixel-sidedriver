@@ -109,6 +109,9 @@ add_executable(PixelSideDriver
         src/Game/Entities/Ground.hpp
         src/Game/Components/Body.hpp
         src/Game/Components/Tags/WheelTag.hpp
+        ignoreMe/WheelWithOutlineAlgorithm.cpp
+        src/Game/PixelUtils.cpp
+        src/Game/PixelUtils.hpp
 )
 
 target_link_libraries(PixelSideDriver

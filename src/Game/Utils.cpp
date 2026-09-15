@@ -6,53 +6,16 @@ namespace Utils {
     b2Vec2  vector2Tob2Vec2(const Vector2 vector2) { return b2Vec2{vector2.x, vector2.y}; }
     Vector2 b2Vec2ToVector2(const b2Vec2 b2Vec2) { return Vector2{b2Vec2.x, b2Vec2.y}; }
 
-    b2BodyId createBox(const b2WorldId worldId, const b2Vec2 positionPixels, b2Vec2 sizePixels, b2BodyType bodyType) {
-        b2BodyDef boxDef = b2DefaultBodyDef();
-        boxDef.type      = b2_dynamicBody;
-        boxDef.position  = (b2Vec2){
-            positionPixels.x / Constants::pixelsPerMeter,
-            positionPixels.y / Constants::pixelsPerMeter
-        };
-        boxDef.type = bodyType;
-        const b2BodyId  boxId    = b2CreateBody(worldId, &boxDef);
-        const b2Polygon boxShape = b2MakeBox(sizePixels.x / 2 / Constants::pixelsPerMeter,
-                                             sizePixels.y / 2 / Constants::pixelsPerMeter);
-        b2ShapeDef boxShapeDef = b2DefaultShapeDef();
-        boxShapeDef.density    = 200.0f;
-        b2CreatePolygonShape(boxId, &boxShapeDef, &boxShape);
-        return boxId;
-    }
-
-    b2BodyId createCircle(const b2WorldId worldId, const b2Vec2 positionPixels, const float radius) {
-        b2BodyDef bodyDef     = b2DefaultBodyDef();
-        bodyDef.type          = b2_dynamicBody;
-        bodyDef.position      = {positionPixels.x / Constants::pixelsPerMeter, positionPixels.y / Constants::pixelsPerMeter};
-        const b2BodyId bodyId = b2CreateBody(worldId, &bodyDef);
-
-        b2Circle circle;
-
-        circle.center = {0,0};
-        circle.radius = radius / Constants::pixelsPerMeter;
-
-        b2ShapeDef shapeDef = b2DefaultShapeDef();
-        shapeDef.density    = 1.0f;
-
-        b2CreateCircleShape(bodyId, &shapeDef, &circle);
-        return bodyId;
-    }
-
-    b2BodyId createChain(b2WorldId worldId) {
-        b2BodyDef bodyDef = b2DefaultBodyDef();
-        bodyDef.type = b2_staticBody;
-        b2BodyId chainBodyId = b2CreateBody(worldId, &bodyDef);
-
-        b2Vec2 points[4] {{0, 0}, {50 / Constants::pixelsPerMeter, 0}, {100/ Constants::pixelsPerMeter, 0}, {150/Constants::pixelsPerMeter, 0}};
-        b2ChainDef chainDef = b2DefaultChainDef();
-        chainDef.points = points;
-        chainDef.count = 4;
-        chainDef.isLoop = false;
-        b2CreateChain(chainBodyId, &chainDef);
-
-        return chainBodyId;
+    void createWeldJoint(entt::registry &registry,
+                         const b2BodyId  bodyAId,
+                         const b2BodyId  bodyBId,
+                         const b2Vec2    localAnchorA,
+                         const b2Vec2    localAnchorB) {
+        b2WeldJointDef jointDef = b2DefaultWeldJointDef();
+        jointDef.bodyIdA        = bodyAId;
+        jointDef.bodyIdB        = bodyBId;
+        jointDef.localAnchorA   = localAnchorA;
+        jointDef.localAnchorB   = localAnchorB;
+        b2CreateWeldJoint(registry.ctx().get<b2WorldId>(), &jointDef);
     }
 }

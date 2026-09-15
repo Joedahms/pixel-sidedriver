@@ -77,7 +77,8 @@ void Game::update() {
     if (gameState.gameplayState == GameplayState::Normal) {
         b2World_Step(registry.ctx().get<b2WorldId>(), registry.ctx().get<GameTime>().frameTime, 4);
 
-        for (const auto wheelView = registry.view<Body, Joint, WheelTag>(); const auto wheel: wheelView) {
+        for (const auto wheelView = registry.view<Body, Joint, WheelTag>(); const auto wheel:
+             wheelView) {
             const auto joint = wheelView.get<Joint>(wheel).id;
             b2WheelJoint_SetMotorSpeed(joint, 0);
         }
@@ -154,27 +155,10 @@ void Game::setupNewGame() {
 
     Ground::createGround(registry);
 
-    const entt::entity body = Box::createPlayerBox(registry, {0, -100}, {200, 40});
+    const entt::entity body   = Box::createPlayerBox(registry, {0, -100}, {200, 40});
     const float        radius = 30;
     Wheel::createWheel(registry, {-200, 20}, radius, body, {-100, 20});
-    Wheel::createWheel(registry, {200, 20}, radius, body, {100, 20});
-
-    /*
-    float size = 30;
-    int gap = 2;
-    int boxes = 0;
-    for (float x = -800; x < 800; x = x + size + gap) {
-        for (float y = 0; y < 500; y = y + size / 2) {
-            Box::createBox(registry,
-                                  {
-                                      x,
-                                   y
-                                  },
-                                  {size / 2, size / 2},b2_dynamicBody);
-            boxes++;
-        }
-    }
-    */
+    //Wheel::createWheel(registry, {200, 20}, radius, body, {100, 20});
 
     BackgroundSystem::createStartingBackground(registry);
 }
