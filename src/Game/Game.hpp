@@ -12,7 +12,7 @@ public:
 private:
     GameState gameState;
 
-    const int initialZoom = 1;
+    const float initialZoom = 0.5f;
 
     void updateTime();
 

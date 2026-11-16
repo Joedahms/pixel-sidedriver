@@ -19,7 +19,6 @@ namespace Box {
         const b2WorldId worldId = registry.ctx().get<b2WorldId>();
 
         b2BodyDef bodyDef = b2DefaultBodyDef();
-        bodyDef.type      = b2_dynamicBody;
         bodyDef.position  = (b2Vec2){
             positionPixels.x / Constants::pixelsPerMeter,
             positionPixels.y / Constants::pixelsPerMeter
@@ -32,7 +31,7 @@ namespace Box {
         boxShapeDef.density    = 200.0f;
         b2ShapeId shapeId = b2CreatePolygonShape(bodyId, &boxShapeDef, &boxShape);
 
-        registry.emplace<Body>(box, bodyId, shapeId);
+        registry.emplace<Body>(box, bodyId, std::vector{std::pair{shapeId, RED}});
 
         return box;
     }

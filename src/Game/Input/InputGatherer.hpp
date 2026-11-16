@@ -11,7 +11,6 @@ public:
 
     void checkKeys(GameState &gameState) const;
 
-
     static void checkMouseWheel(GameState &gameState);
 
 private:

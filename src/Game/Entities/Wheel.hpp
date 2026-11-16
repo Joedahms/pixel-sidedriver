@@ -3,5 +3,5 @@
 #include <entt/entity/entity.hpp>
 
 namespace Wheel {
-    auto createWheel(entt::registry& registry, b2Vec2 positionPixels, float radius, entt::entity parent, b2Vec2 attachmentPoint) -> entt::entity;
+    auto createWheel(entt::registry &registry, b2Vec2 positionPixels, entt::entity parent, b2Vec2 attachmentPoint) -> entt::entity;
 }
