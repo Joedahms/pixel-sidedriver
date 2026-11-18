@@ -155,7 +155,7 @@ void Game::setupNewGame() {
 
     Ground::createGround(registry);
 
-    constexpr b2Vec2 playerStartingPosition = {.x = 0, .y = -500};
+    constexpr b2Vec2 playerStartingPosition = {.x = 0, .y = -400};
     const Body playerBody = ImageImporter::importImage("sprites/truck_body.png",
                                                        playerStartingPosition,
                                                        worldId);

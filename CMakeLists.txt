@@ -18,6 +18,12 @@ FetchContent_Declare(
 )
 FetchContent_MakeAvailable(raylib)
 
+# FastNoiseLite - vendored single header (MIT), upstream tag v1.1.1
+add_library(FastNoiseLite INTERFACE
+        src/third_party/FastNoiseLite/FastNoiseLite.hpp)
+target_include_directories(FastNoiseLite INTERFACE
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/third_party/FastNoiseLite)
+
 add_executable(PixelSideDriver
         # Entry point & third-party
         src/main.cpp
@@ -120,7 +126,7 @@ add_executable(PixelSideDriver
 )
 
 target_link_libraries(PixelSideDriver
-        raylib EnTT::EnTT imgui::imgui box2d::box2d)
+        raylib EnTT::EnTT imgui::imgui box2d::box2d FastNoiseLite)
 #target_compile_options(PixelSideDriver PRIVATE -Os)
 
 # Copy assets next to the executable so the build output is relocatable

@@ -1,16 +1,13 @@
 #include "Wheel.hpp"
 
-#include <vector>
 #include <entt/entity/registry.hpp>
 
 #include "Box.hpp"
 #include "../ImageImporter.hpp"
-#include "../PixelUtils.hpp"
 #include "../Components/Body.hpp"
 #include "../Components/Joint.hpp"
 #include "../Components/Relationship.hpp"
 #include "../Components/Tags/LayerThreeTag.hpp"
-#include "../Components/Tags/LayerTwoTag.hpp"
 #include "../Components/Tags/WheelTag.hpp"
 #include "../Constants/Constants.hpp"
 
