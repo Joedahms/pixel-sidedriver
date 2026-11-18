@@ -7,9 +7,9 @@ Side view driving similar to that one game I can't remember the name of right no
 - [raylib](https://www.raylib.com/) 6.0 - windowing, rendering, input (fetched via CMake `FetchContent`)
 - [EnTT](https://github.com/skypjack/entt) - entity-component-system
 - [Dear ImGui](https://github.com/ocornut/imgui) via rlImGui - debug overlay and menu UI
-- [cereal](https://uscilab.github.io/cereal/) - serialization
+- [FastNoiseLite](https://github.com/Auburn/FastNoiseLite) - terrain generation
 
-EnTT, ImGui, and cereal are resolved through [Conan](https://conan.io/); raylib is fetched directly by CMake.
+EnTT, ImGui, and cereal are resolved through [Conan](https://conan.io/); raylib is fetched directly by CMake. FastNoiseLite's header is copied in direcly.
 
 ## Requirements
 
