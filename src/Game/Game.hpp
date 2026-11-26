@@ -1,5 +1,6 @@
 #pragma once
-#include <chrono>
+
+#include <box2d/box2d.h>
 
 #include "GameState.hpp"
 
@@ -23,4 +24,6 @@ private:
     void setupCamera();
 
     void setupNewGame();
+
+    static void setupPlayer(entt::registry& registry, b2WorldId worldId);
 };

@@ -21,6 +21,7 @@ namespace {
         b2ShapeDef shapeDef     = b2DefaultShapeDef();
         shapeDef.density        = pixelDensity;
         shapeDef.updateBodyMass = false;
+        shapeDef.material.friction = 0.5;
 
         std::vector<std::pair<b2ShapeId, Color> > shapes;
 
@@ -52,6 +53,7 @@ namespace {
 
 namespace ImageImporter {
     Body importImage(const std::string &imagePath,
+                     const float        pixelDensity,
                      const b2Vec2       positionPixels,
                      const b2WorldId    worldId) {
         b2BodyDef bodyDef = b2DefaultBodyDef();
@@ -63,7 +65,7 @@ namespace ImageImporter {
         const b2BodyId                                  bodyId   = b2CreateBody(worldId, &bodyDef);
         const std::vector<std::pair<b2ShapeId, Color> > shapeIds = attachShapes(imagePath,
             bodyId,
-            10.0f);
+            pixelDensity);
 
         return Body{.bodyId = bodyId, .shapes = shapeIds};
     }

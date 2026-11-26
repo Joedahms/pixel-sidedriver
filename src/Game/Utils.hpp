@@ -1,7 +1,6 @@
 #pragma once
 
 #include <raylib.h>
-#include <vector>
 #include <box2d/math_functions.h>
 #include <entt/entity/registry.hpp>
 
@@ -12,5 +11,9 @@ namespace Utils {
 
     Vector2 b2Vec2ToVector2(b2Vec2 b2Vec2);
 
-    void createWeldJoint(entt::registry& registry, b2BodyId bodyAId, b2BodyId bodyBId, b2Vec2 localAnchorA, b2Vec2 localAnchorB);
+    void createWeldJoint(entt::registry &registry,
+                         b2BodyId        bodyAId,
+                         b2BodyId        bodyBId,
+                         b2Vec2          localAnchorA,
+                         b2Vec2          localAnchorB);
 }

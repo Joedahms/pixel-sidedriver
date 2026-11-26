@@ -152,26 +152,40 @@ void Game::setupNewGame() {
     worldDef.gravity    = {0, 10};
     b2WorldId worldId   = b2CreateWorld(&worldDef);
     registry.ctx().emplace<b2WorldId>(worldId);
-
     Ground::createGround(registry);
 
-    constexpr b2Vec2 playerStartingPosition = {.x = 0, .y = -400};
-    const Body playerBody = ImageImporter::importImage("sprites/truck_body.png",
-                                                       playerStartingPosition,
-                                                       worldId);
+    setupPlayer(registry, worldId);
+
+    BackgroundSystem::createStartingBackground(registry);
+}
+
+void Game::setupPlayer(entt::registry& registry, const b2WorldId worldId) {
+    constexpr float pixelDensity = 15.0f;
+    constexpr b2Vec2 playerStartingPosition = {.x = 0, .y = -1000};
+    const Body       playerBody             = ImageImporter::importImage("sprites/truck_body.png",
+        pixelDensity,
+        playerStartingPosition,
+        worldId);
     const entt::entity player = registry.create();
     registry.emplace<Body>(player, playerBody);
     registry.emplace<PlayerTag>(player);
     registry.emplace<LayerTwoTag>(player);
 
     Wheel::createWheel(registry,
-                       {20 * 16 + playerStartingPosition.x, 32 * 16 + playerStartingPosition.y},
+                       pixelDensity,
+                       {
+                           .x = 20 * 16 + playerStartingPosition.x,
+                           .y = 32 * 16 + playerStartingPosition.y
+                       },
                        player,
-                       {20 * 16, 32 * 16});
+                       {.x = 20 * 16, .y = 32 * 16});
     Wheel::createWheel(registry,
-                       {75 * 16 + playerStartingPosition.x, 32 * 16 + playerStartingPosition.y},
+                       pixelDensity,
+                       {
+                           .x = 75 * 16 + playerStartingPosition.x,
+                           .y = 32 * 16 + playerStartingPosition.y
+                       },
                        player,
-                       {75 * 16, 32 * 16});
+                       {.x = 75 * 16, .y = 32 * 16});
 
-    BackgroundSystem::createStartingBackground(registry);
 }

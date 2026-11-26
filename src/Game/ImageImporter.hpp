@@ -4,5 +4,5 @@
 #include "Components/Body.hpp"
 
 namespace ImageImporter {
-    Body importImage(const std::string& imagePath, b2Vec2 positionPixels, b2WorldId worldId);
+    Body importImage(const std::string& imagePath, float pixelDensity, b2Vec2 positionPixels, b2WorldId worldId);
 }
