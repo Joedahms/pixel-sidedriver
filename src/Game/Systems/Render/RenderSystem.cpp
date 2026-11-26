@@ -10,7 +10,6 @@
 #include "../../Components/Tags/LayerOneTag.hpp"
 #include "../../Components/Tags/LayerThreeTag.hpp"
 #include "../../Components/Tags/LayerTwoTag.hpp"
-#include "../../Components/Tags/ShowClickInfoTag.hpp"
 #include "../../Constants/Constants.hpp"
 #include "../../Entities/Ground.hpp"
 
@@ -175,15 +174,6 @@ namespace {
             }
         }
     }
-
-    void renderEntityIds(entt::registry &registry) {
-        for (const auto &showClickInfoPositionView = registry.view<ShowClickInfoTag, Transform2D>();
-             const auto  showClickInfo: showClickInfoPositionView) {
-            const auto &[x, y] = showClickInfoPositionView.get<Transform2D>(showClickInfo).position;
-            const auto  id     = entt::to_integral(showClickInfo);
-            DrawText(std::to_string(id).c_str(), x, y, 40, WHITE);
-        }
-    }
 }
 
 namespace RenderSystem {
@@ -197,6 +187,5 @@ namespace RenderSystem {
         };
 
         renderRenderableEntities(screenRectangle, registry);
-        renderEntityIds(registry);
     }
 }

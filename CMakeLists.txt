@@ -20,7 +20,8 @@ FetchContent_MakeAvailable(raylib)
 
 # FastNoiseLite - vendored single header (MIT), upstream tag v1.1.1
 add_library(FastNoiseLite INTERFACE
-        src/third_party/FastNoiseLite/FastNoiseLite.hpp)
+        src/third_party/FastNoiseLite/FastNoiseLite.hpp
+        src/Game/Components/Engine.hpp)
 target_include_directories(FastNoiseLite INTERFACE
         ${CMAKE_CURRENT_SOURCE_DIR}/src/third_party/FastNoiseLite)
 
@@ -49,8 +50,6 @@ add_executable(PixelSideDriver
 
         # Components - Tags
         src/Game/Components/Tags/DestroyTag.hpp
-        src/Game/Components/Tags/HasClickInfoTag.hpp
-        src/Game/Components/Tags/ShowClickInfoTag.hpp
 
         # Input
         src/Game/Input/ActionName.cpp
@@ -61,8 +60,6 @@ add_executable(PixelSideDriver
         src/Game/Input/InputNames.hpp
 
         # Systems
-        src/Game/Systems/ClickInfo/ClickInfoSystem.cpp
-        src/Game/Systems/ClickInfo/ClickInfoSystem.hpp
         src/Game/Systems/Destroy/DestroySystem.cpp
         src/Game/Systems/Destroy/DestroySystem.hpp
         src/Game/Systems/Player/PlayerSystem.cpp
@@ -77,10 +74,6 @@ add_executable(PixelSideDriver
         src/Game/Gui/GuiManager.hpp
         src/Game/Gui/DebugOverlay/DebugOverlay.cpp
         src/Game/Gui/DebugOverlay/DebugOverlay.hpp
-        src/Game/Gui/Inventory/HotbarGui.cpp
-        src/Game/Gui/Inventory/HotbarGui.hpp
-        src/Game/Gui/Inventory/InventoryGuiItem.cpp
-        src/Game/Gui/Inventory/InventoryGuiItem.hpp
         src/Game/Gui/Menu/MainMenu/MainMenu.cpp
         src/Game/Gui/Menu/MainMenu/MainMenu.hpp
         src/Game/Gui/Menu/PauseMenu/PauseMenu.cpp
@@ -92,8 +85,6 @@ add_executable(PixelSideDriver
         src/Game/Gui/Menu/PauseMenu/InputBindingsMenu.cpp
         src/Game/Gui/Menu/PauseMenu/InputBindingsMenu.hpp
         src/Game/Gui/Menu/PauseMenu/InputBindingsMenuState.hpp
-        src/Game/Gui/SimulationTime/SimulationTime.cpp
-        src/Game/Gui/SimulationTime/SimulationTime.hpp
         src/Game/Components/Tags/PlayerTag.hpp
         src/Game/Systems/Background/BackgroundSystem.cpp
         src/Game/Systems/Background/BackgroundSystem.hpp
@@ -123,6 +114,9 @@ add_executable(PixelSideDriver
         src/Game/Components/Tags/LayerOneTag.hpp
         src/Game/Components/Tags/LayerTwoTag.hpp
         src/Game/Components/Tags/LayerThreeTag.hpp
+        src/Game/Components/GasTank.hpp
+        src/Game/Gui/GasGauge.cpp
+        src/Game/Gui/GasGauge.hpp
 )
 
 target_link_libraries(PixelSideDriver

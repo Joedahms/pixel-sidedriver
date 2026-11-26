@@ -1,19 +1,15 @@
 #include "GuiManager.hpp"
 
-
-#include "../Systems/ClickInfo/ClickInfoSystem.hpp"
+#include "GasGauge.hpp"
 #include "Menu/PauseMenu/PauseMenu.hpp"
 
-GuiManager::GuiManager(entt::registry &registry) : hotbarGui(registry) {
-}
+GuiManager::GuiManager(entt::registry &) {}
 
 void GuiManager::draw(GameState &gameState) {
     auto &registry = gameState.registry;
     switch (gameState.gameplayState) {
         case GameplayState::Normal: {
-            hotbarGui.draw(registry);
-            SimulationTime::draw(registry);
-            ClickInfoSystem::update(registry);
+            GasGauge::draw(registry);
             break;
         }
         case GameplayState::Paused: {
