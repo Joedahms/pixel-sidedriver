@@ -1,4 +1,5 @@
 #include <raylib.h>
+#include <raymath.h>
 #include <rlImGui.h>
 #include <box2d/box2d.h>
 
@@ -7,9 +8,10 @@
 #include "GameTime.hpp"
 #include "ImageImporter.hpp"
 #include "Inventory.hpp"
-#include "raymath.h"
 #include "Utils.hpp"
 #include "../VelocityChangeEvent.hpp"
+#include "Components/Engine.hpp"
+#include "Components/GasTank.hpp"
 #include "Components/Joint.hpp"
 #include "Components/Tags/LayerTwoTag.hpp"
 #include "Components/Tags/PlayerTag.hpp"
@@ -86,7 +88,7 @@ void Game::update() {
         SpriteAnimationSystem::update(registry);
         DestroySystem::destroy(registry);
 
-        const auto &dispatcher = registry.ctx().get<entt::dispatcher>();
+        auto &dispatcher = registry.ctx().get<entt::dispatcher>();
         dispatcher.update();
 
         updateTime();
@@ -100,9 +102,9 @@ void Game::update() {
                              Constants::pixelsPerMeter);
         registry.ctx().get<Camera2D>().target = {playerPosition.x + 700, playerPosition.y + 100};
 
-        const b2Vec2 playerVelocity = b2Body_GetLinearVelocity(registry.get<Body>(player).bodyId);
-        if (playerVelocity.x != 0 || playerVelocity.y != 0) {
-            auto &dispatcher = registry.ctx().get<entt::dispatcher>();
+        if (const b2Vec2 playerVelocity =
+                    b2Body_GetLinearVelocity(registry.get<Body>(player).bodyId);
+            playerVelocity.x != 0 || playerVelocity.y != 0) {
             dispatcher.enqueue(VelocityChangeEvent{});
         }
     }
@@ -159,17 +161,20 @@ void Game::setupNewGame() {
     BackgroundSystem::createStartingBackground(registry);
 }
 
-void Game::setupPlayer(entt::registry& registry, const b2WorldId worldId) {
-    constexpr float pixelDensity = 15.0f;
+void Game::setupPlayer(entt::registry &registry, const b2WorldId worldId) {
+    constexpr float  pixelDensity           = 15.0f;
     constexpr b2Vec2 playerStartingPosition = {.x = 0, .y = -1000};
     const Body       playerBody             = ImageImporter::importImage("sprites/truck_body.png",
         pixelDensity,
         playerStartingPosition,
         worldId);
     const entt::entity player = registry.create();
+    registry.ctx().emplace<entt::entity>(player);
     registry.emplace<Body>(player, playerBody);
     registry.emplace<PlayerTag>(player);
     registry.emplace<LayerTwoTag>(player);
+    registry.emplace<GasTank>(player);
+    registry.emplace<Engine>(player);
 
     Wheel::createWheel(registry,
                        pixelDensity,
@@ -187,5 +192,4 @@ void Game::setupPlayer(entt::registry& registry, const b2WorldId worldId) {
                        },
                        player,
                        {.x = 75 * 16, .y = 32 * 16});
-
 }
