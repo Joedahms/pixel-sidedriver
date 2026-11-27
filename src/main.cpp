@@ -13,7 +13,11 @@ auto main() -> int {
                Constants::defaultWindowSize.y,
                "Raylib Starter 2D Top Down");
     //ToggleBorderlessWindowed();
+
     bool running = true;
+    rlImGuiSetup(true);
+    SetTargetFPS(Constants::fps);
+    SetExitKey(KEY_NULL);
 
     while (running && !WindowShouldClose()) {
         MainMenu::run(running);

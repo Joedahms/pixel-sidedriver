@@ -1,19 +1,16 @@
 #pragma once
 #include <array>
 #include <raylib.h>
-#include <unordered_set>
 
 #include "ActionName.hpp"
 #include "InputNames.hpp"
-#include "../GameplayState.hpp"
 
 struct InputBinding {
     ActionName actionName;
 
-    int                               keyCode;
-    std::string                       keyName;
-    bool                              toggle = false;
-    std::unordered_set<GameplayState> activeGameplayStates;
+    int         keyCode;
+    std::string keyName;
+    bool        toggle = false;
 };
 
 struct InputBindings {
@@ -24,64 +21,28 @@ struct InputBindings {
         {
             {
                 .actionName = ActionName::PauseGame,
-                .keyCode = KEY_ESCAPE,
-                .keyName = getKeyName(KEY_ESCAPE),
-                .toggle = true,
-                .activeGameplayStates =
-                {GameplayState::Normal, GameplayState::Paused }
+                .keyCode    = KEY_ESCAPE,
+                .keyName    = getKeyName(KEY_ESCAPE),
+                .toggle     = true,
             },
             {
                 .actionName = ActionName::Throttle,
-                .keyCode = KEY_D,
-                .keyName = getKeyName(KEY_D),
-                .toggle = false,
-                .activeGameplayStates = {GameplayState::Normal}
+                .keyCode    = KEY_D,
+                .keyName    = getKeyName(KEY_D),
+                .toggle     = false,
             },
             {
                 .actionName = ActionName::Brake,
-                .keyCode = KEY_A,
-                .keyName = getKeyName(KEY_A),
-                .toggle = false,
-                .activeGameplayStates = {GameplayState::Normal}
+                .keyCode    = KEY_A,
+                .keyName    = getKeyName(KEY_A),
+                .toggle     = false,
             },
-
             {
                 .actionName = ActionName::ToggleDebugOverlay,
-                .keyCode = KEY_GRAVE,
-                .keyName = getKeyName(KEY_GRAVE),
-                .toggle = true,
-                .activeGameplayStates = {GameplayState::Normal, }
+                .keyCode    = KEY_GRAVE,
+                .keyName    = getKeyName(KEY_GRAVE),
+                .toggle     = true,
             },
-
-            {
-                .actionName = ActionName::SimulationSpeedZero,
-                .keyCode = KEY_SPACE,
-                .keyName = getKeyName(KEY_SPACE),
-                .toggle = true,
-                .activeGameplayStates = {GameplayState::Normal}
-            },
-            {
-                .actionName = ActionName::SimulationSpeedOne,
-                .keyCode = KEY_ONE,
-                .keyName = getKeyName(KEY_ONE),
-                .toggle = true,
-                .activeGameplayStates = {GameplayState::Normal}
-            },
-            {
-                .actionName = ActionName::SimulationSpeedTwo,
-                .keyCode = KEY_TWO,
-                .keyName = getKeyName(KEY_TWO),
-                .toggle = true,
-                .activeGameplayStates = {GameplayState::Normal}
-            },
-            {
-                .actionName = ActionName::SimulationSpeedThree,
-                .keyCode = KEY_THREE,
-                .keyName = getKeyName(KEY_THREE),
-                .toggle = true,
-                .activeGameplayStates = {GameplayState::Normal}
-            },
-
         }
     };
 };

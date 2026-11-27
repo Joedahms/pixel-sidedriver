@@ -5,6 +5,7 @@
 
 #include "ActionName.hpp"
 #include "../GameTime.hpp"
+#include "../Gui/Menu/PauseMenu/PauseMenu.hpp"
 #include "../Systems/Background/BackgroundSystem.hpp"
 #include "../Systems/Player/PlayerSystem.hpp"
 
@@ -18,37 +19,21 @@ void InputGatherer::setup(entt::registry &registry) {
 
 void InputGatherer::checkKeys(GameState &gameState) const {
     for (const auto &inputBinding: inputBindings.bindings) {
-        if (!inputBinding.activeGameplayStates.contains(gameState.gameplayState)) { continue; }
-
         if (inputBinding.toggle) {
             if (IsKeyPressed(inputBinding.keyCode)) {
                 switch (inputBinding.actionName) {
                     case ActionName::PauseGame: {
-                        if (GameplayState &gameplayState = gameState.gameplayState;
-                            gameplayState == GameplayState::Normal) {
-                            gameplayState = GameplayState::Paused;
+                        auto &menuStack = gameState.menuStack;
+                        if (gameState.menuStack.empty()) {
+                            gameState.menuStack.push(std::make_unique<PauseMenu>());
                         }
-                        else { gameplayState = GameplayState::Normal; }
+                        else if (dynamic_cast<PauseMenu *>(menuStack.top().get())) {
+                            menuStack.pop();
+                        }
                         break;
                     }
                     case ActionName::ToggleDebugOverlay: {
                         gameState.drawDebugOverlay = !gameState.drawDebugOverlay;
-                        break;
-                    }
-                    case ActionName::SimulationSpeedZero: {
-                        gameState.registry.ctx().get<GameTime>().simulationSpeed = 0;
-                        break;
-                    }
-                    case ActionName::SimulationSpeedOne: {
-                        gameState.registry.ctx().get<GameTime>().simulationSpeed = 1;
-                        break;
-                    }
-                    case ActionName::SimulationSpeedTwo: {
-                        gameState.registry.ctx().get<GameTime>().simulationSpeed = 2;
-                        break;
-                    }
-                    case ActionName::SimulationSpeedThree: {
-                        gameState.registry.ctx().get<GameTime>().simulationSpeed = 8;
                         break;
                     }
                     default: ;

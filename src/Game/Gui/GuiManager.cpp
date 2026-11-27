@@ -6,15 +6,10 @@
 GuiManager::GuiManager(entt::registry &) {}
 
 void GuiManager::draw(GameState &gameState) {
-    auto &registry = gameState.registry;
-    switch (gameState.gameplayState) {
-        case GameplayState::Normal: {
-            GasGauge::draw(registry);
-            break;
-        }
-        case GameplayState::Paused: {
-            pauseMenu.draw(gameState);
-            break;
-        }
+    std::stack<std::unique_ptr<Menu> > &menuStack = gameState.menuStack;
+    if (menuStack.empty()) {
+        GasGauge::draw(gameState.registry);
+        return;
     }
+    menuStack.top()->draw(gameState);
 }
