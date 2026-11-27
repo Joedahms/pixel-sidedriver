@@ -2,10 +2,9 @@
 
 #include <imgui.h>
 
-auto PauseMenu::draw(GameState &gameState) -> void {
-    checkPauseMenuState(gameState);
-    if (pauseMenuState != PauseMenuState::None) { return; }
+#include "SettingsMenu.hpp"
 
+void PauseMenu::draw(GameState &gameState) {
     const ImGuiIO &io = ImGui::GetIO();
 
     ImGui::SetNextWindowPos(ImVec2(0, 0));
@@ -31,16 +30,14 @@ auto PauseMenu::draw(GameState &gameState) -> void {
 
     ImGui::BeginGroup();
 
-    if (ImGui::Button("Resume", ImVec2(buttonWidth, buttonHeight))) {
-        pauseMenuState = PauseMenuState::Resume;
-    }
+    if (ImGui::Button("Resume", ImVec2(buttonWidth, buttonHeight))) { gameState.menuStack.pop(); }
 
     ImGui::SetCursorPosX((windowSize.x - buttonWidth) / 2.0f);
     ImGui::Dummy(ImVec2(0, spacing));
     ImGui::SetCursorPosX((windowSize.x - buttonWidth) / 2.0f);
 
     if (ImGui::Button("Settings", ImVec2(buttonWidth, buttonHeight))) {
-        pauseMenuState = PauseMenuState::Settings;
+        gameState.menuStack.push(std::make_unique<SettingsMenu>());
     }
 
     ImGui::SetCursorPosX((windowSize.x - buttonWidth) / 2.0f);
@@ -48,7 +45,7 @@ auto PauseMenu::draw(GameState &gameState) -> void {
     ImGui::SetCursorPosX((windowSize.x - buttonWidth) / 2.0f);
 
     if (ImGui::Button("Exit to Main Menu", ImVec2(buttonWidth, buttonHeight))) {
-        pauseMenuState = PauseMenuState::ExitToMainMenu;
+        gameState.status = GameStatus::MainMenu;
     }
 
     ImGui::SetCursorPosX((windowSize.x - buttonWidth) / 2.0f);
@@ -56,34 +53,9 @@ auto PauseMenu::draw(GameState &gameState) -> void {
     ImGui::SetCursorPosX((windowSize.x - buttonWidth) / 2.0f);
 
     if (ImGui::Button("Exit", ImVec2(buttonWidth, buttonHeight))) {
-        pauseMenuState = PauseMenuState::Exit;
+        gameState.status = GameStatus::Exiting;
     }
 
     ImGui::EndGroup();
     ImGui::End();
-    checkPauseMenuState(gameState);
-}
-
-void PauseMenu::checkPauseMenuState(GameState &gameState) {
-    switch (pauseMenuState) {
-        case PauseMenuState::None: { break; }
-        case PauseMenuState::Resume: {
-            pauseMenuState          = PauseMenuState::None;
-            gameState.gameplayState = GameplayState::Normal;
-            break;
-        }
-        case PauseMenuState::Settings: {
-            std::optional<PauseMenuState> newState = settingsMenu.update(gameState);
-            if (newState.has_value()) { pauseMenuState = newState.value(); }
-            break;
-        }
-        case PauseMenuState::ExitToMainMenu: {
-            gameState.status = GameStatus::MainMenu;
-            break;
-        }
-        case PauseMenuState::Exit: {
-            gameState.status = GameStatus::Exiting;
-            break;
-        }
-    }
 }

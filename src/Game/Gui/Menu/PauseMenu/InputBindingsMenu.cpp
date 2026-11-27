@@ -2,18 +2,14 @@
 
 #include <imgui.h>
 
-#include "../../../Constants/Constants.hpp"
 #include "../../../Input/InputGatherer.hpp"
 #include "../../../Input/InputNames.hpp"
 
-auto InputBindingsMenu::draw(GameState &gameState) -> std::optional<SettingsMenuState> {
-    if (const std::optional<SettingsMenuState> settingsMenuState = checkInputBindingsMenuState();
-        settingsMenuState.has_value()) { return settingsMenuState; }
-
+void InputBindingsMenu::draw(GameState &gameState) {
     auto &     bindings = gameState.registry.ctx().get<InputGatherer>().inputBindings.bindings;
     static int capturingIndex = -1;
 
-    ImGuiIO &io = ImGui::GetIO();
+    const ImGuiIO &io = ImGui::GetIO();
     ImGui::SetNextWindowPos({0, 0});
     ImGui::SetNextWindowSize(io.DisplaySize);
     constexpr ImGuiWindowFlags flags = ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoResize |
@@ -31,7 +27,7 @@ auto InputBindingsMenu::draw(GameState &gameState) -> std::optional<SettingsMenu
 
             ImGui::TableNextColumn();
             ImGui::PushID(static_cast<int>(i));
-            const char *label = (capturingIndex == (int) i)
+            const char *label = capturingIndex == static_cast<int>(i)
                                     ? "Press a key..."
                                     : bindings[i].keyName.c_str();
             if (ImGui::Button(label, ImVec2(200, 0))) { capturingIndex = static_cast<int>(i); }
@@ -48,18 +44,6 @@ auto InputBindingsMenu::draw(GameState &gameState) -> std::optional<SettingsMenu
         }
     }
 
-    if (ImGui::Button("Back")) { inputBindingsMenuState = InputBindingsMenuState::Back; }
+    if (ImGui::Button("Back")) { gameState.menuStack.pop(); }
     ImGui::End();
-
-    return checkInputBindingsMenuState();
-}
-
-auto InputBindingsMenu::checkInputBindingsMenuState() -> std::optional<SettingsMenuState> {
-    switch (inputBindingsMenuState) {
-        case InputBindingsMenuState::None: { return std::nullopt; }
-        case InputBindingsMenuState::Back: {
-            inputBindingsMenuState = InputBindingsMenuState::None;
-            return SettingsMenuState::None;
-        }
-    }
 }

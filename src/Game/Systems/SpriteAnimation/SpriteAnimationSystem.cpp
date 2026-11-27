@@ -7,7 +7,6 @@
 namespace SpriteAnimationSystem {
     void update(entt::registry &registry) {
         const float frameTime       = registry.ctx().get<GameTime>().frameTime;
-        const float simulationSpeed = registry.ctx().get<GameTime>().simulationSpeed;
 
         for (const auto view = registry.view<Sprite, SpriteAnimation>(); const auto entity: view) {
             auto &sprite                              = view.get<Sprite>(entity);
@@ -15,7 +14,7 @@ namespace SpriteAnimationSystem {
 
             if (sprite.numFrames <= 0) { continue; }
 
-            timeSinceLastFrame += frameTime * simulationSpeed;
+            timeSinceLastFrame += frameTime;
             if (timeSinceLastFrame >= frameDuration) {
                 timeSinceLastFrame = 0;
                 sprite.currentFrame++;

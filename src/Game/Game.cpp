@@ -47,11 +47,10 @@ auto Game::run() -> GameStatus {
 }
 
 void Game::updateTime() {
-    auto &[simulationSpeed, frameTime, gameTime, formattedGameTime] = gameState.registry.ctx().get<
-        GameTime>();
+    auto &[frameTime, gameTime, formattedGameTime] = gameState.registry.ctx().get<GameTime>();
 
     frameTime = GetFrameTime();
-    gameTime  += std::chrono::duration<float>(frameTime) * simulationSpeed;
+    gameTime  += std::chrono::duration<float>(frameTime);
 
     const double currentTimeCount = gameTime.count();
 
@@ -76,7 +75,7 @@ void Game::update() {
 
     auto &registry = gameState.registry;
 
-    if (gameState.gameplayState == GameplayState::Normal) {
+    if (gameState.menuStack.empty()) {
         b2World_Step(registry.ctx().get<b2WorldId>(), registry.ctx().get<GameTime>().frameTime, 4);
 
         for (const auto wheelView = registry.view<Body, Joint, WheelTag>(); const auto wheel:

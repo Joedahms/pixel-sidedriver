@@ -21,7 +21,8 @@ FetchContent_MakeAvailable(raylib)
 # FastNoiseLite - vendored single header (MIT), upstream tag v1.1.1
 add_library(FastNoiseLite INTERFACE
         src/third_party/FastNoiseLite/FastNoiseLite.hpp
-        src/Game/Components/Engine.hpp)
+        src/Game/Components/Engine.hpp
+        src/Game/Gui/Menu/Menu.hpp)
 target_include_directories(FastNoiseLite INTERFACE
         ${CMAKE_CURRENT_SOURCE_DIR}/src/third_party/FastNoiseLite)
 
@@ -84,7 +85,6 @@ add_executable(PixelSideDriver
         src/Game/Gui/Menu/PauseMenu/SettingsMenuState.hpp
         src/Game/Gui/Menu/PauseMenu/InputBindingsMenu.cpp
         src/Game/Gui/Menu/PauseMenu/InputBindingsMenu.hpp
-        src/Game/Gui/Menu/PauseMenu/InputBindingsMenuState.hpp
         src/Game/Components/Tags/PlayerTag.hpp
         src/Game/Systems/Background/BackgroundSystem.cpp
         src/Game/Systems/Background/BackgroundSystem.hpp
@@ -92,7 +92,6 @@ add_executable(PixelSideDriver
         src/Game/Entities/Star.cpp
         src/Game/Entities/Star.hpp
         src/VelocityChangeEvent.hpp
-        src/Game/GameplayState.hpp
         src/Game/Inventory.hpp
         src/Game/Components/Body.hpp
         src/Game/Components/Joint.hpp

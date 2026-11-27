@@ -4,14 +4,8 @@
 #include <raylib.h>
 #include <rlImGui.h>
 
-#include "../../../Constants/Constants.hpp"
-
 namespace MainMenu {
     void run(bool &running) {
-        rlImGuiSetup(true);
-        SetTargetFPS(Constants::fps);
-        SetExitKey(KEY_NULL);
-
         MainMenuState mainMenuState;
 
         ImGuiIO &io        = ImGui::GetIO();

@@ -1,13 +1,14 @@
 #pragma once
+#include <stack>
 #include <entt/entt.hpp>
 
-#include "GameplayState.hpp"
 #include "GameStatus.hpp"
+#include "Gui/Menu/Menu.hpp"
 
 struct GameState {
     entt::basic_registry<> registry;
     GameStatus             status = GameStatus::Playing;
 
     bool          drawDebugOverlay = false;
-    GameplayState gameplayState    = GameplayState::Normal;
+    std::stack<std::unique_ptr<Menu>> menuStack;
 };

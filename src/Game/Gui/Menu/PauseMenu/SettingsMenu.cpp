@@ -4,11 +4,8 @@
 
 #include "InputBindingsMenu.hpp"
 
-auto SettingsMenu::update(GameState &gameState) -> std::optional<PauseMenuState> {
-    if (const std::optional<PauseMenuState> pauseMenuState = checkSettingsMenuState(gameState);
-        pauseMenuState.has_value()) { return pauseMenuState; }
-
-    ImGuiIO &io = ImGui::GetIO();
+void SettingsMenu::draw(GameState &gameState) {
+    const ImGuiIO &io = ImGui::GetIO();
 
     ImGui::SetNextWindowPos(ImVec2(0, 0));
     ImGui::SetNextWindowSize(io.DisplaySize);
@@ -34,7 +31,7 @@ auto SettingsMenu::update(GameState &gameState) -> std::optional<PauseMenuState>
     ImGui::BeginGroup();
 
     if (ImGui::Button("Modify Input Bindings", ImVec2(buttonWidth, buttonHeight))) {
-        settingsMenuState = SettingsMenuState::ModifyInputBindings;
+        gameState.menuStack.push(std::make_unique<InputBindingsMenu>());
     }
 
     ImGui::SetCursorPosX((windowSize.x - buttonWidth) / 2.0f);
@@ -42,26 +39,9 @@ auto SettingsMenu::update(GameState &gameState) -> std::optional<PauseMenuState>
     ImGui::SetCursorPosX((windowSize.x - buttonWidth) / 2.0f);
 
     if (ImGui::Button("Back", ImVec2(buttonWidth, buttonHeight))) {
-        settingsMenuState = SettingsMenuState::Back;
+        gameState.menuStack.pop();
     }
 
     ImGui::EndGroup();
     ImGui::End();
-
-    return checkSettingsMenuState(gameState);
-}
-
-auto SettingsMenu::checkSettingsMenuState(GameState &gameState) -> std::optional<PauseMenuState> {
-    switch (settingsMenuState) {
-        case SettingsMenuState::None: { return std::nullopt; }
-        case SettingsMenuState::ModifyInputBindings: {
-            std::optional<SettingsMenuState> newState = inputBindingsMenu.draw(gameState);
-            if (newState.has_value()) { settingsMenuState = newState.value(); }
-            return PauseMenuState::Settings;
-        }
-        case SettingsMenuState::Back: {
-            settingsMenuState = SettingsMenuState::None;
-            return PauseMenuState::None;
-        }
-    }
 }

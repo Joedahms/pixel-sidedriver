@@ -6,10 +6,6 @@ enum class ActionName {
     Throttle,
     Brake,
     ToggleDebugOverlay,
-    SimulationSpeedZero,
-    SimulationSpeedOne,
-    SimulationSpeedTwo,
-    SimulationSpeedThree,
 };
 
 auto toString(ActionName actionName) -> std::string;
