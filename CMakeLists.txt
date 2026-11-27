@@ -7,7 +7,7 @@ find_package(EnTT REQUIRED)
 find_package(imgui REQUIRED)
 find_package(box2d REQUIRED)
 
-include_directories(include src/rlImGui)
+include_directories(include src/third_party/rlImGui)
 
 include(FetchContent)
 FetchContent_Declare(
@@ -28,7 +28,7 @@ target_include_directories(FastNoiseLite INTERFACE
 add_executable(PixelSideDriver
         # Entry point & third-party
         src/main.cpp
-        src/rlImGui/rlImGui.cpp
+        src/third_party/rlImGui/rlImGui.cpp
 
         # Game core
         src/Game/Game.cpp
