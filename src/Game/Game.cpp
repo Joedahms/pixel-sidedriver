@@ -150,7 +150,7 @@ void Game::setupNewGame() {
     registry.ctx().emplace<Inventory>();
 
     b2WorldDef worldDef = b2DefaultWorldDef();
-    worldDef.gravity    = {0, 10};
+    worldDef.gravity    = {.x = 0, .y = 10};
     b2WorldId worldId   = b2CreateWorld(&worldDef);
     registry.ctx().emplace<b2WorldId>(worldId);
     Ground::createGround(registry);
@@ -161,12 +161,11 @@ void Game::setupNewGame() {
 }
 
 void Game::setupPlayer(entt::registry &registry, const b2WorldId worldId) {
-    constexpr float  pixelDensity           = 15.0f;
-    constexpr b2Vec2 playerStartingPosition = {.x = 0, .y = -1000};
-    const Body       playerBody             = ImageImporter::importImage("sprites/truck_body.png",
-        pixelDensity,
-        playerStartingPosition,
-        worldId);
+    constexpr float pixelDensity = 15.0f;
+    const Body      playerBody   = ImageImporter::importImage("sprites/truck_body.png",
+                                                              pixelDensity,
+                                                              Constants::playerStartingPosition,
+                                                              worldId);
     const entt::entity player = registry.create();
     registry.ctx().emplace<entt::entity>(player);
     registry.emplace<Body>(player, playerBody);
@@ -178,16 +177,16 @@ void Game::setupPlayer(entt::registry &registry, const b2WorldId worldId) {
     Wheel::createWheel(registry,
                        pixelDensity,
                        {
-                           .x = 20 * 16 + playerStartingPosition.x,
-                           .y = 32 * 16 + playerStartingPosition.y
+                           .x = 20 * 16 + Constants::playerStartingPosition.x,
+                           .y = 32 * 16 + Constants::playerStartingPosition.y
                        },
                        player,
                        {.x = 20 * 16, .y = 32 * 16});
     Wheel::createWheel(registry,
                        pixelDensity,
                        {
-                           .x = 75 * 16 + playerStartingPosition.x,
-                           .y = 32 * 16 + playerStartingPosition.y
+                           .x = 75 * 16 + Constants::playerStartingPosition.x,
+                           .y = 32 * 16 + Constants::playerStartingPosition.y
                        },
                        player,
                        {.x = 75 * 16, .y = 32 * 16});
