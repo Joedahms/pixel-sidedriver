@@ -21,7 +21,7 @@ void GasGauge::draw(entt::registry &registry) {
     constexpr ImVec2 padding = {8, 8};
     ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, padding);
 
-    ImGui::Begin("##SimulationTime", nullptr, flags);
+    ImGui::Begin("##GasGauge", nullptr, flags);
 
     ImDrawList *draw     = ImGui::GetWindowDrawList();
     ImVec2      position = ImGui::GetCursorScreenPos();

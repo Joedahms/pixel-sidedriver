@@ -116,6 +116,8 @@ add_executable(PixelSideDriver
         src/Game/Components/GasTank.hpp
         src/Game/Gui/GasGauge.cpp
         src/Game/Gui/GasGauge.hpp
+        src/Game/Gui/Score.cpp
+        src/Game/Gui/Score.hpp
 )
 
 target_link_libraries(PixelSideDriver
